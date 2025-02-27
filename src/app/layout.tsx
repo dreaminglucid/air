@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My Token",
-  description: "My Token",
+  title: "Wealth Is Next",
+  description: "Wealth Is Next",
 };
 
 export default function RootLayout({
