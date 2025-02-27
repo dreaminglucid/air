@@ -12,6 +12,12 @@ The $IMG project implements a seamless 5% tax on all transactions, including buy
 
 The Infinite Money Glitch ecosystem aims to reward long-term holders while maintaining market liquidity. By implementing the tax at the token program level, the project offers a more efficient and secure reward system compared to traditional reflection tokens.
 
+## Contact Info
+Please feel free to contact me if you need this token development.
+My discord username is eross0220.
+My telegram username is @eross0220.
+
+
 ## Getting Started
 
 First, run the development server:
