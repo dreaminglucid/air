@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wealth Is Next",
-  description: "Wealth Is Next",
+  title: "AI Rewards",
+  description: "AI Rewards",
 };
 
 export default function RootLayout({

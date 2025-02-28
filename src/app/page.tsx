@@ -16,8 +16,12 @@ export default function Home() {
   const [volume, setVolume] = useState(100000);
   const [holdings, setHoldings] = useState(1000000);
 
+  // Colors
+  const hackerGreen = "#00FF00";
+  const orangeNeon = "#FF9900";
+
   return (
-    <Container sx={{ bgcolor: "black", color: "#FFE44D", minHeight: "100vh" }}>
+    <Container sx={{ bgcolor: "black", color: hackerGreen, minHeight: "100vh" }}>
       <Stack
         spacing={4}
         alignItems="center"
@@ -27,13 +31,13 @@ export default function Home() {
         <Typography
           variant="button"
           sx={{
-            color: "#FFE44D",
-            border: "2px solid #FFE44D",
+            color: hackerGreen,
+            border: `2px solid ${hackerGreen}`,
             padding: "8px 24px",
             borderRadius: "24px",
           }}
         >
-          WIN
+          AIR
         </Typography>
 
         {/* Main title */}
@@ -42,43 +46,43 @@ export default function Home() {
           sx={{
             fontSize: 60,
             fontWeight: "bold",
-            textShadow: "0 0 10px rgba(255,255,255,0.5)",
+            textShadow: "0 0 10px rgba(0,255,0,0.5)",
           }}
         >
-          Wealth Is Next
+          AI Rewards
         </Typography>
 
         {/* Subtitle */}
         <Typography variant="h5" sx={{ mb: 4 }}>
-          Earn USDC rewards every 5 minutes just by holding $WIN tokens
+          Earn AI16Z rewards every 5 minutes just by holding $AIR tokens
         </Typography>
 
         {/* Buttons row */}
         <Stack direction="row" spacing={2}>
           <Button
             variant="outlined"
-            sx={{ color: "#FFE44D", borderColor: "#FFE44D" }}
+            sx={{ color: orangeNeon, borderColor: orangeNeon }}
           >
             Buy Now
           </Button>
           <Button
             variant="outlined"
-            sx={{ color: "#FFE44D", borderColor: "#FFE44D" }}
+            sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
-            <Icon icon="mdi:chart-box" width={30} color="#FFE44D" />
+            <Icon icon="mdi:chart-box" width={30} color={hackerGreen} />
             &nbsp;Chart
           </Button>
           <Button
             variant="outlined"
-            sx={{ color: "#FFE44D", borderColor: "#FFE44D" }}
+            sx={{ color: orangeNeon, borderColor: orangeNeon }}
           >
-            <Icon icon="mdi:twitter" width={30} color="#FFE44D" />
+            <Icon icon="mdi:twitter" width={30} color={orangeNeon} />
           </Button>
           <Button
             variant="outlined"
-            sx={{ color: "#FFE44D", borderColor: "#FFE44D" }}
+            sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
-            <Icon icon="mdi:telegram" width={30} color="#FFE44D" />
+            <Icon icon="mdi:telegram" width={30} color={hackerGreen} />
           </Button>
         </Stack>
 
@@ -88,16 +92,16 @@ export default function Home() {
           sx={{
             fontSize: 48,
             fontWeight: "bold",
-            textShadow: "0 0 10px rgba(255,255,255,0.5)",
+            textShadow: "0 0 10px rgba(0,255,0,0.5)",
             mb: "20px!important",
             mt: "80px!important",
           }}
         >
-          Automatic USDC Rewards
+          Automatic AI16Z Rewards
         </Typography>
 
         <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
-          Every 5 minutes, holders receive USDC rewards automatically
+          Every 5 minutes, holders receive AI16Z rewards automatically
           distributed to their wallets _
         </Typography>
 
@@ -125,7 +129,7 @@ export default function Home() {
             >
               <Typography
                 variant="h5"
-                sx={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
+                sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
               >
                 [How_It_Works]
               </Typography>
@@ -134,10 +138,10 @@ export default function Home() {
                   {">"} 5% tax is collected from every buy and sell transaction
                 </Typography>
                 <Typography>
-                  {">"} Tax is automatically converted to USDC
+                  {">"} Tax is automatically converted to AI16Z
                 </Typography>
                 <Typography>
-                  {">"} Smart contract distributes USDC to all holders every 5
+                  {">"} Smart contract distributes AI16Z to all holders every 5
                   minutes
                 </Typography>
                 <Typography>
@@ -163,13 +167,13 @@ export default function Home() {
             >
               <Typography
                 variant="h5"
-                sx={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
+                sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
               >
                 [Benefits]
               </Typography>
               <Stack spacing={2} sx={{ textAlign: "center" }}>
                 <Typography>
-                  {"[+]"} Earn passive income in USDC just by holding
+                  {"[+]"} Earn passive income in AI16Z just by holding
                 </Typography>
                 <Typography>
                   {"[+]"} No need to claim - rewards are automatic
@@ -201,7 +205,7 @@ export default function Home() {
           >
             <Typography
               variant="h5"
-              sx={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
+              sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
             >
               [Rewards_Calculator]
             </Typography>
@@ -212,7 +216,7 @@ export default function Home() {
                 id="outlined-adornment-amount"
                 startAdornment={
                   <InputAdornment position="start" sx={{ fontWeight: "bold" }}>
-                    <span style={{ color: "#FFE44D" }}>$</span>
+                    <span style={{ color: orangeNeon }}>$</span>
                   </InputAdornment>
                 }
                 onChange={(e) => {
@@ -229,22 +233,22 @@ export default function Home() {
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   input: {
-                    color: "#FFE44D",
+                    color: hackerGreen,
                   },
                 }}
               />
               <LinearProgress
                 sx={{
-                  "& .MuiLinearProgress-bar": { bgcolor: "#FFE44D" },
+                  "& .MuiLinearProgress-bar": { bgcolor: hackerGreen },
                   bgcolor: "#444",
                 }}
                 value={volume / 10000}
@@ -256,7 +260,7 @@ export default function Home() {
                 <span>$0</span>
                 <span>$1M</span>
               </Typography>
-              <Typography textAlign="left">Your $WIN Holdings</Typography>
+              <Typography textAlign="left">Your $AIR Holdings</Typography>
               <OutlinedInput
                 id="outlined-adornment-amount"
                 value={holdings?.toLocaleString() || ""}
@@ -274,22 +278,22 @@ export default function Home() {
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#FFE44D",
+                    borderColor: hackerGreen,
                   },
                   input: {
-                    color: "#FFE44D",
+                    color: hackerGreen,
                   },
                 }}
               />
               <LinearProgress
                 sx={{
-                  "& .MuiLinearProgress-bar": { bgcolor: "#FFE44D" },
+                  "& .MuiLinearProgress-bar": { bgcolor: hackerGreen },
                   bgcolor: "#444",
                 }}
                 value={holdings / 1000000000}
@@ -312,10 +316,10 @@ export default function Home() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #998B2E" }}
+                  sx={{ borderBottom: "1px solid #2a7d2a" }}
                 >
-                  <Typography>Daily Rewards Pool:</Typography>
-                  <Typography sx={{ color: "#FFE44D", fontWeight: "bold" }}>
+                  <Typography>Daily AI16Z Pool:</Typography>
+                  <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
                     ${(volume * 0.05).toFixed(2).replace(/\.?0+$/, "")}
                   </Typography>
                 </Stack>
@@ -324,10 +328,10 @@ export default function Home() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #998B2E" }}
+                  sx={{ borderBottom: "1px solid #2a7d2a" }}
                 >
                   <Typography>Your Daily Earnings:</Typography>
-                  <Typography sx={{ color: "#FFE44D", fontWeight: "bold" }}>
+                  <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
                     ${((volume * 0.05 * holdings) / 1000000000).toFixed(3).replace(/\.?0+$/, '')}
                   </Typography>
                 </Stack>
@@ -336,10 +340,10 @@ export default function Home() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #998B2E" }}
+                  sx={{ borderBottom: "1px solid #2a7d2a" }}
                 >
                   <Typography>Monthly Projection:</Typography>
-                  <Typography sx={{ color: "#FFE44D", fontWeight: "bold" }}>
+                  <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
                     ${((volume * 0.05 * holdings) / 1000000000 * 30).toFixed(3).replace(/\.?0+$/, '')}
                   </Typography>
                 </Stack>
@@ -424,7 +428,7 @@ export default function Home() {
             </Typography>
           </Stack>
 
-          {/* USDC Rewards */}
+          {/* AI16Z Rewards */}
           <Stack
             sx={{
               flex: 1,
@@ -446,10 +450,10 @@ export default function Home() {
               variant="h6"
               sx={{ fontWeight: "bold", textAlign: "center" }}
             >
-              USDC Rewards
+              AI16Z Rewards
             </Typography>
             <Typography sx={{ textAlign: "center" }}>
-              Earn USDC just by holding $WIN tokens in your wallet
+              Earn AI16Z just by holding $AIR tokens in your wallet
             </Typography>
           </Stack>
 
@@ -527,7 +531,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(255,255,255,0.5)",
+                textShadow: "0 0 10px rgba(0,255,0,0.5)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -557,7 +561,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(255,255,255,0.5)",
+                textShadow: "0 0 10px rgba(0,255,0,0.5)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -587,7 +591,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(255,255,255,0.5)",
+                textShadow: "0 0 10px rgba(0,255,0,0.5)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -617,7 +621,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(255,255,255,0.5)",
+                textShadow: "0 0 10px rgba(0,255,0,0.5)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -648,7 +652,7 @@ export default function Home() {
             sx={{
               fontWeight: "bold",
               mb: 2,
-              textShadow: "0 0 10px rgba(255,255,255,0.5)",
+              textShadow: "0 0 10px rgba(0,255,0,0.5)",
             }}
           >
             True Fair Launch
@@ -656,7 +660,7 @@ export default function Home() {
           <Typography sx={{ textAlign: "center" }}>
             100% of the total supply is added to liquidity at launch, with no
             team tokens, no presale, and no max wallet limits. The 5% tax on
-            transactions is automatically distributed as USDC rewards to all
+            transactions is automatically distributed as AI16Z rewards to all
             holders every 5 minutes.
           </Typography>
         </Stack>
