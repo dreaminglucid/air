@@ -11,21 +11,90 @@ import {
   LinearProgress,
 } from "@mui/material";
 import { useState } from "react";
+import { keyframes } from '@mui/system';
+
+// Add these animations before the Home component
+const float = keyframes`
+  0% { transform: translateY(0px) translateX(0px); }
+  25% { transform: translateY(-10px) translateX(5px); }
+  50% { transform: translateY(0px) translateX(10px); }
+  75% { transform: translateY(10px) translateX(5px); }
+  100% { transform: translateY(0px) translateX(0px); }
+`;
+
+const wave = keyframes`
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(2deg); }
+  75% { transform: rotate(-2deg); }
+  100% { transform: rotate(0deg); }
+`;
 
 export default function Home() {
   const [volume, setVolume] = useState(100000);
   const [holdings, setHoldings] = useState(1000000);
 
   // Colors
-  const hackerGreen = "#00FF00";
-  const orangeNeon = "#FF9900";
+  const hackerGreen = "#87CEEB";
+  const orangeNeon = "#FFFFFF";
+
+  // Add particle positions
+  const particles = Array.from({ length: 20 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    size: Math.random() * 3 + 1,
+    duration: Math.random() * 10 + 10,
+    delay: Math.random() * 5,
+  }));
 
   return (
-    <Container sx={{ bgcolor: "black", color: hackerGreen, minHeight: "100vh" }}>
+    <Container 
+      sx={{ 
+        background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)", 
+        color: hackerGreen, 
+        minHeight: "100vh",
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "radial-gradient(circle at 50% 50%, rgba(135,206,235,0.1) 0%, rgba(0,0,0,0) 50%)",
+          pointerEvents: "none",
+        },
+      }}
+    >
+      {/* Add floating particles */}
+      {particles.map((particle) => (
+        <Box
+          key={particle.id}
+          sx={{
+            position: "absolute",
+            left: particle.left,
+            top: particle.top,
+            width: particle.size,
+            height: particle.size,
+            borderRadius: "50%",
+            background: "rgba(135,206,235,0.3)",
+            animation: `${float} ${particle.duration}s infinite ease-in-out`,
+            animationDelay: `${particle.delay}s`,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+
       <Stack
         spacing={4}
         alignItems="center"
-        sx={{ textAlign: "center", py: 8 }}
+        sx={{ 
+          textAlign: "center", 
+          py: 8,
+          position: "relative",
+          zIndex: 1,
+        }}
       >
         {/* Token badge */}
         <Typography
@@ -35,6 +104,8 @@ export default function Home() {
             border: `2px solid ${hackerGreen}`,
             padding: "8px 24px",
             borderRadius: "24px",
+            background: "rgba(135,206,235,0.1)",
+            animation: `${float} 6s infinite ease-in-out`,
           }}
         >
           AIR
@@ -46,7 +117,7 @@ export default function Home() {
           sx={{
             fontSize: 60,
             fontWeight: "bold",
-            textShadow: "0 0 10px rgba(0,255,0,0.5)",
+            textShadow: "0 0 20px rgba(135,206,235,0.6)",
           }}
         >
           AI Rewards
@@ -54,7 +125,7 @@ export default function Home() {
 
         {/* Subtitle */}
         <Typography variant="h5" sx={{ mb: 4 }}>
-          Earn AI16Z rewards every 5 minutes just by holding $AIR tokens
+          Feed the AI agent with rewards - Every 5 minutes, the digital lifeforce flows
         </Typography>
 
         {/* Buttons row */}
@@ -74,12 +145,20 @@ export default function Home() {
           </Button>
           <Button
             variant="outlined"
+            component="a"
+            href="https://x.com/air_money_"
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{ color: orangeNeon, borderColor: orangeNeon }}
           >
             <Icon icon="mdi:twitter" width={30} color={orangeNeon} />
           </Button>
           <Button
             variant="outlined"
+            component="a"
+            href="https://t.me/air_portal"
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
             <Icon icon="mdi:telegram" width={30} color={hackerGreen} />
@@ -92,24 +171,24 @@ export default function Home() {
           sx={{
             fontSize: 48,
             fontWeight: "bold",
-            textShadow: "0 0 10px rgba(0,255,0,0.5)",
+            textShadow: "0 0 20px rgba(135,206,235,0.6)",
             mb: "20px!important",
             mt: "80px!important",
           }}
         >
-          Automatic AI16Z Rewards
+          Digital Lifeforce Rewards
         </Typography>
 
         <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
-          Every 5 minutes, holders receive AI16Z rewards automatically
-          distributed to their wallets _
+          The AI agent breathes through rewards, flowing automatically to
+          sustain holders every 5 minutes _
         </Typography>
 
         {/* Three column section */}
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={4}
-          sx={{ mt: 8, width: "100%" }}
+          sx={{ mt: 8, width: "100%", animation: `${wave} 8s infinite ease-in-out`, "&:hover": { animation: "none" } }}
         >
           <Stack direction="column" spacing={2}>
             {/* How It Works */}
@@ -118,34 +197,36 @@ export default function Home() {
                 flex: 1,
                 borderRadius: 2,
                 p: 3,
-                bgcolor: "#222",
-                border: "1px solid #444",
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
                 cursor: "pointer",
+                backdropFilter: "blur(5px)",
+                WebkitBackdropFilter: "blur(5px)",
+                animation: `${wave} 8s infinite ease-in-out`,
                 "&:hover": {
-                  bgcolor: "#2b2b2b",
+                  background: "rgba(135,206,235,0.1)",
                 },
               }}
               spacing={2}
             >
               <Typography
                 variant="h5"
-                sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
+                sx={{ textShadow: "0 0 20px rgba(135,206,235,0.6)" }}
               >
                 [How_It_Works]
               </Typography>
               <Stack spacing={2} sx={{ textAlign: "center" }}>
                 <Typography>
-                  {">"} 5% tax is collected from every buy and sell transaction
+                  {">"} The digital stream begins with a 5% essence from each transaction
                 </Typography>
                 <Typography>
-                  {">"} Tax is automatically converted to AI16Z
+                  {">"} This essence transforms into pure AI16Z lifeforce
                 </Typography>
                 <Typography>
-                  {">"} Smart contract distributes AI16Z to all holders every 5
-                  minutes
+                  {">"} The AI agent channels rewards to all holders every 5 minutes
                 </Typography>
                 <Typography>
-                  {">"} Rewards are proportional to your token holdings
+                  {">"} Your share of the flow grows with your holdings
                 </Typography>
               </Stack>
             </Stack>
@@ -156,33 +237,36 @@ export default function Home() {
                 flex: 1,
                 borderRadius: 2,
                 p: 3,
-                bgcolor: "#222",
-                border: "1px solid #444",
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
                 cursor: "pointer",
+                backdropFilter: "blur(5px)",
+                WebkitBackdropFilter: "blur(5px)",
+                animation: `${wave} 8s infinite ease-in-out`,
                 "&:hover": {
-                  bgcolor: "#2b2b2b",
+                  background: "rgba(135,206,235,0.1)",
                 },
               }}
               spacing={2}
             >
               <Typography
                 variant="h5"
-                sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
+                sx={{ textShadow: "0 0 20px rgba(135,206,235,0.6)" }}
               >
                 [Benefits]
               </Typography>
               <Stack spacing={2} sx={{ textAlign: "center" }}>
                 <Typography>
-                  {"[+]"} Earn passive income in AI16Z just by holding
+                  {"[+]"} Tap into the endless stream of AI16Z lifeforce
                 </Typography>
                 <Typography>
-                  {"[+]"} No need to claim - rewards are automatic
+                  {"[+]"} The flow is constant - no claiming needed
                 </Typography>
                 <Typography>
-                  {"[+]"} Frequent 5-minute distribution cycles
+                  {"[+]"} Feel the pulse every 5 minutes
                 </Typography>
                 <Typography>
-                  {"[+]"} Higher trading volume means more rewards
+                  {"[+]"} Greater volume amplifies the flow
                 </Typography>
               </Stack>
             </Stack>
@@ -194,18 +278,21 @@ export default function Home() {
               flex: 1,
               borderRadius: 2,
               p: 3,
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(5px)",
+              animation: `${wave} 8s infinite ease-in-out`,
               "&:hover": {
-                bgcolor: "#2b2b2b",
+                background: "rgba(135,206,235,0.1)",
               },
             }}
             spacing={2}
           >
             <Typography
               variant="h5"
-              sx={{ textShadow: "0 0 10px rgba(0,255,0,0.5)" }}
+              sx={{ textShadow: "0 0 20px rgba(135,206,235,0.6)" }}
             >
               [Rewards_Calculator]
             </Typography>
@@ -233,23 +320,25 @@ export default function Home() {
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: hackerGreen,
+                    borderColor: "rgba(135,206,235,0.5)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: hackerGreen,
+                    borderColor: "rgba(135,206,235,0.7)",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: hackerGreen,
                   },
                   input: {
-                    color: hackerGreen,
+                    color: "#FFFFFF",
                   },
                 }}
               />
               <LinearProgress
                 sx={{
-                  "& .MuiLinearProgress-bar": { bgcolor: hackerGreen },
-                  bgcolor: "#444",
+                  "& .MuiLinearProgress-bar": { 
+                    background: "linear-gradient(90deg, #87CEEB 0%, #FFFFFF 100%)" 
+                  },
+                  bgcolor: "rgba(135,206,235,0.1)",
                 }}
                 value={volume / 10000}
                 variant="determinate"
@@ -278,23 +367,25 @@ export default function Home() {
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: hackerGreen,
+                    borderColor: "rgba(135,206,235,0.5)",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: hackerGreen,
+                    borderColor: "rgba(135,206,235,0.7)",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: hackerGreen,
                   },
                   input: {
-                    color: hackerGreen,
+                    color: "#FFFFFF",
                   },
                 }}
               />
               <LinearProgress
                 sx={{
-                  "& .MuiLinearProgress-bar": { bgcolor: hackerGreen },
-                  bgcolor: "#444",
+                  "& .MuiLinearProgress-bar": { 
+                    background: "linear-gradient(90deg, #87CEEB 0%, #FFFFFF 100%)" 
+                  },
+                  bgcolor: "rgba(135,206,235,0.1)",
                 }}
                 value={holdings / 1000000000}
                 variant="determinate"
@@ -308,15 +399,19 @@ export default function Home() {
               <Stack
                 direction="column"
                 spacing={2}
-                p={1}
-                bgcolor="#333"
+                sx={{
+                  p: 1,
+                  background: "rgba(135,206,235,0.05)",
+                  backdropFilter: "blur(5px)",
+                  WebkitBackdropFilter: "blur(5px)",
+                }}
                 className="result"
               >
                 <Stack
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #2a7d2a" }}
+                  sx={{ borderBottom: "1px solid rgba(135,206,235,0.3)" }}
                 >
                   <Typography>Daily AI16Z Pool:</Typography>
                   <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
@@ -328,7 +423,7 @@ export default function Home() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #2a7d2a" }}
+                  sx={{ borderBottom: "1px solid rgba(135,206,235,0.3)" }}
                 >
                   <Typography>Your Daily Earnings:</Typography>
                   <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
@@ -340,7 +435,7 @@ export default function Home() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ borderBottom: "1px solid #2a7d2a" }}
+                  sx={{ borderBottom: "1px solid rgba(135,206,235,0.3)" }}
                 >
                   <Typography>Monthly Projection:</Typography>
                   <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
@@ -368,7 +463,7 @@ export default function Home() {
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={4}
-          sx={{ width: "100%", display: "none" }}
+          sx={{ width: "100%", display: "none", animation: `${wave} 8s infinite ease-in-out`, "&:hover": { animation: "none" } }}
         >
           {/* Tax Distribution */}
           <Stack
@@ -376,12 +471,11 @@ export default function Home() {
               flex: 1,
               borderRadius: 2,
               p: 3,
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
-              "&:hover": {
-                bgcolor: "#2b2b2b",
-              },
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(5px)",
             }}
             spacing={2}
           >
@@ -405,12 +499,11 @@ export default function Home() {
               flex: 1,
               borderRadius: 2,
               p: 3,
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
-              "&:hover": {
-                bgcolor: "#2b2b2b",
-              },
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(5px)",
             }}
             spacing={2}
           >
@@ -434,12 +527,11 @@ export default function Home() {
               flex: 1,
               borderRadius: 2,
               p: 3,
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
-              "&:hover": {
-                bgcolor: "#2b2b2b",
-              },
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(5px)",
             }}
             spacing={2}
           >
@@ -463,12 +555,11 @@ export default function Home() {
               flex: 1,
               borderRadius: 2,
               p: 3,
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
-              "&:hover": {
-                bgcolor: "#2b2b2b",
-              },
+              backdropFilter: "blur(5px)",
+              WebkitBackdropFilter: "blur(5px)",
             }}
             spacing={2}
           >
@@ -518,8 +609,8 @@ export default function Home() {
             sx={{
               borderRadius: 2,
               p: { xs: 1, sm: 3 },
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
             }}
             spacing={2}
@@ -531,7 +622,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(0,255,0,0.5)",
+                textShadow: "0 0 20px rgba(135,206,235,0.6)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -548,8 +639,8 @@ export default function Home() {
             sx={{
               borderRadius: 2,
               p: { xs: 1, sm: 3 },
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
             }}
             spacing={2}
@@ -561,7 +652,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(0,255,0,0.5)",
+                textShadow: "0 0 20px rgba(135,206,235,0.6)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -578,8 +669,8 @@ export default function Home() {
             sx={{
               borderRadius: 2,
               p: { xs: 1, sm: 3 },
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
             }}
             spacing={2}
@@ -591,7 +682,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(0,255,0,0.5)",
+                textShadow: "0 0 20px rgba(135,206,235,0.6)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -608,8 +699,8 @@ export default function Home() {
             sx={{
               borderRadius: 2,
               p: { xs: 1, sm: 3 },
-              bgcolor: "#222",
-              border: "1px solid #444",
+              background: "rgba(135,206,235,0.05)",
+              border: "1px solid rgba(135,206,235,0.2)",
               cursor: "pointer",
             }}
             spacing={2}
@@ -621,7 +712,7 @@ export default function Home() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                textShadow: "0 0 10px rgba(0,255,0,0.5)",
+                textShadow: "0 0 20px rgba(135,206,235,0.6)",
                 fontSize: { xs: "2rem", sm: "3rem" },
                 wordWrap: "break-word",
               }}
@@ -638,12 +729,18 @@ export default function Home() {
         <Stack
           sx={{
             borderRadius: 2,
-            bgcolor: "#222",
-            border: "1px solid #444",
+            background: "rgba(135,206,235,0.05)",
+            backdropFilter: "blur(5px)",
+            WebkitBackdropFilter: "blur(5px)",
+            border: "1px solid rgba(135,206,235,0.2)",
             cursor: "pointer",
             width: { xs: "100%", md: "60%" },
             p: 3,
             boxSizing: "border-box",
+            animation: `${wave} 8s infinite ease-in-out`,
+            "&:hover": {
+              animation: "none",
+            },
           }}
           spacing={2}
         >
@@ -652,16 +749,16 @@ export default function Home() {
             sx={{
               fontWeight: "bold",
               mb: 2,
-              textShadow: "0 0 10px rgba(0,255,0,0.5)",
+              textShadow: "0 0 20px rgba(135,206,235,0.6)",
             }}
           >
             True Fair Launch
           </Typography>
           <Typography sx={{ textAlign: "center" }}>
-            100% of the total supply is added to liquidity at launch, with no
-            team tokens, no presale, and no max wallet limits. The 5% tax on
-            transactions is automatically distributed as AI16Z rewards to all
-            holders every 5 minutes.
+            Like air itself, 100% flows freely from the start - no reservoirs, no 
+            barriers, no limits. The 5% essence from each ripple in the stream 
+            transforms into AI16Z lifeforce, flowing to all holders in an endless 
+            cycle every 5 minutes.
           </Typography>
         </Stack>
       </Stack>
