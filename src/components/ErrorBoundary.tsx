@@ -13,10 +13,12 @@ interface State {
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public static getDerivedStateFromError(_: Error): State {
+    // We explicitly name the parameter with an underscore to indicate it's not used
     return { hasError: true };
   }
 
@@ -27,11 +29,7 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return this.props.fallback || (
-        <div style={{ 
-          padding: "20px", 
-          textAlign: "center",
-          color: "#87CEEB"
-        }}>
+        <div style={{ padding: '20px', textAlign: 'center' }}>
           <h2>Something went wrong</h2>
           <p>Please try refreshing the page</p>
         </div>

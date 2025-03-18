@@ -1,0 +1,8 @@
+# This file tells ESLint to ignore specific files and directories
+.next/
+node_modules/
+public/
+out/
+build/
+dist/
+*.min.js 
