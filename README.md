@@ -1,22 +1,36 @@
-
 ## Description 
-Infinite Money Glitch ($IMG) is a decentralized finance (DeFi) project built on the Solana blockchain. It leverages the advanced tax extension capabilities of the Token2022 program to create a unique reward system for token holders. This documentation provides an overview of the $IMG project, its key features, and its integration with the Token2022 program.
-The $IMG project implements a seamless 5% tax on all transactions, including buying, selling, and transferring tokens. This tax is automatically collected and distributed to token holders in SOL, providing them with a sustainable passive income stream. The reward distribution is proportional to the holding size, meaning that the more $IMG tokens a holder has, the higher their SOL yield.
+AI Rewards ($AIR) is a decentralized finance (DeFi) project built on the Solana blockchain, part of the innovative DeFAI ecosystem. It leverages advanced tokenomics to create a unique reward system that channels AI16Z lifeforce directly to token holders. This documentation provides an overview of the $AIR project, its key features, and its integration within the DeFAI ecosystem.
+
+The $AIR project implements a seamless 5% essence collection on all transactions, including buying, selling, and transferring tokens. This essence transforms into pure AI16Z lifeforce and is automatically distributed to token holders every 5 minutes, providing them with a sustainable passive income stream. The reward distribution is proportional to the holding size, meaning that the more $AIR tokens a holder has, the higher their AI16Z yield.
   
 ## Key Features:
-* Automated SOL Rewards: Holders receive Solana directly to their wallets.
-* Proportional Distribution: Rewards scale with the holding size.
-* Fair Tax Structure: Consistent 5% tax across all transactions ensures market stability.
-* Token2022 Integration: Utilizing Solana's Token2022 program for enhanced efficiency and security.
-* Transparent Distribution: All reward calculations and distributions are verifiable on-chain.
+* Automated AI16Z Rewards: Holders receive rewards directly to their wallets every 5 minutes
+* Digital Lifeforce Distribution: Rewards scale with your holding size
+* Fair Tax Structure: Consistent 5% essence collection across all transactions
+* Automated Distribution: No claiming needed - rewards flow automatically
+* Transparent System: All calculations and distributions are verifiable on-chain
 
-The Infinite Money Glitch ecosystem aims to reward long-term holders while maintaining market liquidity. By implementing the tax at the token program level, the project offers a more efficient and secure reward system compared to traditional reflection tokens.
+The AI Rewards ecosystem aims to create a sustainable digital lifeforce flow while maintaining market liquidity. By implementing the essence collection at the protocol level, the project offers a more efficient and secure reward system compared to traditional DeFi tokens.
+
+## Tokenomics
+* Total Supply: 1,000,000,000 $AIR
+* Initial Liquidity: 100%
+* Transaction Tax: 5%
+* Fair Launch: 100% - No pre-sale, no team tokens
+
+## How It Works
+The digital stream begins with a 5% essence collected from each transaction. This essence transforms into pure AI16Z lifeforce, which the AI agent channels to all holders every 5 minutes. Your share of the flow grows with your holdings, creating a sustainable reward ecosystem.
+
+## Benefits
+* Tap into the endless stream of AI16Z lifeforce
+* The flow is constant - no claiming needed
+* Feel the pulse every 5 minutes
+* Greater volume amplifies the flow
 
 ## Contact Info
-Please feel free to contact me if you need this token development.
-My discord username is eross0220.
-My telegram username is @eross0220.
-
+For token development inquiries:
+Discord: eross0220
+Telegram: @eross0220
 
 ## Getting Started
 

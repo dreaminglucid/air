@@ -10,7 +10,7 @@ import {
   Box,
   LinearProgress,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { keyframes } from '@mui/system';
 
 // Add these animations before the Home component
@@ -29,6 +29,23 @@ const wave = keyframes`
   100% { transform: rotate(0deg); }
 `;
 
+const handleNumberInput = (value: string, setter: React.Dispatch<React.SetStateAction<number>>) => {
+  // Remove commas and leading zeros
+  const cleanValue = value.replace(/,/g, '');
+  
+  // Check if the value is empty
+  if (cleanValue === '') {
+    setter(0);
+    return;
+  }
+  
+  // Convert to number if it's a valid number
+  const numValue = Number(cleanValue);
+  if (!isNaN(numValue)) {
+    setter(numValue);
+  }
+};
+
 export default function Home() {
   const [volume, setVolume] = useState(100000);
   const [holdings, setHoldings] = useState(1000000);
@@ -37,8 +54,28 @@ export default function Home() {
   const hackerGreen = "#87CEEB";
   const orangeNeon = "#FFFFFF";
 
+  // Add this state to control the number of particles based on screen size
+  const [particleCount, setParticleCount] = useState(20);
+
+  // Add this effect to adjust particle count based on screen width
+  useEffect(() => {
+    const handleResize = () => {
+      // Reduce particles on smaller screens
+      setParticleCount(window.innerWidth < 768 ? 10 : 20);
+    };
+    
+    // Set initial count
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Add particle positions
-  const particles = Array.from({ length: 20 }, (_, i) => ({
+  const particles = Array.from({ length: particleCount }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
     top: `${Math.random() * 100}%`,
@@ -120,7 +157,7 @@ export default function Home() {
             textShadow: "0 0 20px rgba(135,206,235,0.6)",
           }}
         >
-          AI Rewards
+          Decentralized Financial AI Rewards
         </Typography>
 
         {/* Subtitle */}
@@ -149,6 +186,7 @@ export default function Home() {
             href="https://x.com/air_money_"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Twitter profile"
             sx={{ color: orangeNeon, borderColor: orangeNeon }}
           >
             <Icon icon="mdi:twitter" width={30} color={orangeNeon} />
@@ -306,17 +344,7 @@ export default function Home() {
                     <span style={{ color: orangeNeon }}>$</span>
                   </InputAdornment>
                 }
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val == "") {
-                    setVolume(0);
-                  } else {
-                    const value = Number(val.replace(/^0+|,/g, ""));
-                    if (value) {
-                      setVolume(value);
-                    }
-                  }
-                }}
+                onChange={(e) => handleNumberInput(e.target.value, setVolume)}
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
@@ -353,17 +381,7 @@ export default function Home() {
               <OutlinedInput
                 id="outlined-adornment-amount"
                 value={holdings?.toLocaleString() || ""}
-                onChange={(e) => {
-                  const val = e.target.value; 
-                  if (val == "") {
-                    setHoldings(0);
-                  } else {
-                    const value = Number(val.replace(/^0+|,/g, ""));
-                    if (value) {
-                      setHoldings(value);
-                    }
-                  }
-                }}
+                onChange={(e) => handleNumberInput(e.target.value, setHoldings)}
                 label=""
                 sx={{
                   "& .MuiOutlinedInput-notchedOutline": {
@@ -594,7 +612,10 @@ export default function Home() {
         {/* Stats Grid */}
         <Box
           display="grid"
-          gridTemplateColumns="repeat(2, 1fr)"
+          gridTemplateColumns={{
+            xs: "1fr",          // Single column on very small screens
+            sm: "repeat(2, 1fr)" // Two columns on small screens and up
+          }}
           gap={2}
           sx={{
             width: "100%",
