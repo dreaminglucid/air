@@ -46,6 +46,24 @@ const handleNumberInput = (value: string, setter: React.Dispatch<React.SetStateA
   }
 };
 
+// Near the top of the file, add this function to handle icon loading errors
+const IconWithFallback = ({ icon, width, color }: { icon: string, width: number, color: string }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return <span style={{ width, height: width, display: 'inline-block', backgroundColor: 'rgba(135,206,235,0.2)' }} />;
+  }
+
+  return (
+    <Icon 
+      icon={icon} 
+      width={width} 
+      color={color} 
+      onError={() => setHasError(true)}
+    />
+  );
+};
+
 export default function Home() {
   const [volume, setVolume] = useState(100000);
   const [holdings, setHoldings] = useState(1000000);
@@ -60,8 +78,15 @@ export default function Home() {
   // Add this effect to adjust particle count based on screen width
   useEffect(() => {
     const handleResize = () => {
-      // Reduce particles on smaller screens
-      setParticleCount(window.innerWidth < 768 ? 10 : 20);
+      // More aggressive reduction on smaller screens
+      const width = window.innerWidth;
+      if (width < 768) {
+        setParticleCount(5); // Even fewer particles on mobile
+      } else if (width < 1200) {
+        setParticleCount(10); // Moderate for tablets
+      } else {
+        setParticleCount(20); // Full experience on desktop
+      }
     };
     
     // Set initial count
@@ -72,6 +97,21 @@ export default function Home() {
     
     // Clean up
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Also add a check to disable particle animation on low-end devices
+  const [disableAnimations, setDisableAnimations] = useState(false);
+
+  useEffect(() => {
+    // Simple check for potentially low-end devices
+    // This is not comprehensive but can help with performance
+    if (
+      navigator.userAgent.includes("Mobile") || 
+      navigator.userAgent.includes("Android") ||
+      /iPad|iPhone|iPod/.test(navigator.userAgent)
+    ) {
+      setDisableAnimations(window.innerWidth < 768);
+    }
   }, []);
 
   // Add particle positions
@@ -105,7 +145,7 @@ export default function Home() {
       }}
     >
       {/* Add floating particles */}
-      {particles.map((particle) => (
+      {!disableAnimations && particles.map((particle) => (
         <Box
           key={particle.id}
           sx={{
@@ -177,7 +217,7 @@ export default function Home() {
             variant="outlined"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
-            <Icon icon="mdi:chart-box" width={30} color={hackerGreen} />
+            <IconWithFallback icon="mdi:chart-box" width={30} color={hackerGreen} />
             &nbsp;Chart
           </Button>
           <Button
@@ -189,7 +229,7 @@ export default function Home() {
             aria-label="Twitter profile"
             sx={{ color: orangeNeon, borderColor: orangeNeon }}
           >
-            <Icon icon="mdi:twitter" width={30} color={orangeNeon} />
+            <IconWithFallback icon="mdi:twitter" width={30} color={orangeNeon} />
           </Button>
           <Button
             variant="outlined"
@@ -199,7 +239,7 @@ export default function Home() {
             rel="noopener noreferrer"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
-            <Icon icon="mdi:telegram" width={30} color={hackerGreen} />
+            <IconWithFallback icon="mdi:telegram" width={30} color={hackerGreen} />
           </Button>
         </Stack>
 
