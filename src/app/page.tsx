@@ -197,12 +197,13 @@ export default function Home() {
             textShadow: "0 0 20px rgba(135,206,235,0.6)",
           }}
         >
-          Decentralized Financial AI Rewards
+          
+          DEFAI REWARDS
         </Typography>
 
         {/* Subtitle */}
         <Typography variant="h5" sx={{ mb: 4 }}>
-          Feed the AI agent with rewards - Every 5 minutes, the digital lifeforce flows
+         Get back hours of your time harvesting rewards with DeFAIza!
         </Typography>
 
         {/* Buttons row */}
@@ -223,7 +224,16 @@ export default function Home() {
           <Button
             variant="outlined"
             component="a"
-            href="https://x.com/air_money_"
+            href="/dashboard"
+            sx={{ color: orangeNeon, borderColor: orangeNeon }}
+          >
+            <IconWithFallback icon="mdi:view-dashboard" width={30} color={orangeNeon} />
+            &nbsp;Dashboard
+          </Button>
+          <Button
+            variant="outlined"
+            component="a"
+            href="https://x.com/elizadotfinance"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter profile"
@@ -234,7 +244,7 @@ export default function Home() {
           <Button
             variant="outlined"
             component="a"
-            href="https://t.me/air_portal"
+            href="https://t.me/elizadotfinance"
             target="_blank"
             rel="noopener noreferrer"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
@@ -254,12 +264,12 @@ export default function Home() {
             mt: "80px!important",
           }}
         >
-          Digital Lifeforce Rewards
+          $AIR is a Digital Lifeforce
         </Typography>
 
         <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
-          The AI agent breathes through rewards, flowing automatically to
-          sustain holders every 5 minutes _
+          DeFaiza is an autonomous AI agent that breathes through rewards, flowing automatically to
+          sustain herself and holders.
         </Typography>
 
         {/* Three column section */}
@@ -1320,9 +1330,8 @@ export default function Home() {
           </Box>
           
           <Typography sx={{ textAlign: "center" }}>
-            On March 31, 2025, all $DeFAI token holders will be eligible for a 1:1 claim of $AIR tokens 
-            via Streamflow. This snapshot ensures early supporters of the DeFAI ecosystem receive 
-            direct allocation of AIR tokens.
+            A snapshot of $DeFAI holders will be taken on March 31, 2025, enabling the 1:1 claim 
+            of $AIR tokens via Streamflow. No action is required before the snapshot date.
           </Typography>
           
           <Box 
@@ -1347,7 +1356,7 @@ export default function Home() {
                 {`>`} Claim window opens April 1, 2025 (00:00 UTC)
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} Unclaimed tokens return to community treasury after 90 days
+                {`>`} Unclaimed tokens return to community treasury after 7 days
               </Typography>
             </Stack>
           </Box>
@@ -1361,7 +1370,7 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            Hold $DeFAI now. Claim $AIR later. Double your ecosystem alignment.
+            Mark your calendar: March 31, 2025.
           </Typography>
         </Stack>
       </Stack>

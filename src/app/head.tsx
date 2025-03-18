@@ -19,6 +19,12 @@ export default function Head() {
         as="image" 
         type="image/svg+xml" 
       />
+      <link 
+        rel="preload" 
+        href="https://api.iconify.design/mdi:view-dashboard.svg" 
+        as="image" 
+        type="image/svg+xml" 
+      />
     </>
   );
 } 
