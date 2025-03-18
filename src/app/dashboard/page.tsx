@@ -37,6 +37,15 @@ type MessageType = {
   timestamp: Date;
 };
 
+// Quick question topics
+const quickTopics = [
+  { id: "trending", label: "Trending Coins", question: "What are the trending cryptocurrencies right now?" },
+  { id: "market", label: "Market Analysis", question: "Can you give me a quick market analysis?" },
+  { id: "defi", label: "DeFi News", question: "What's happening in DeFi today?" },
+  { id: "nft", label: "NFT Updates", question: "Any interesting NFT developments lately?" },
+  { id: "airdrops", label: "Airdrops", question: "What are the best upcoming airdrops?" },
+];
+
 export default function Dashboard() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([
@@ -56,6 +65,38 @@ export default function Dashboard() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [messages]);
+
+  // Fix the useEffect for global styling - it had a syntax error
+  useEffect(() => {
+    // Apply styles directly to document body and html element
+    document.documentElement.style.background = "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)";
+    document.documentElement.style.height = "100%";
+    document.body.style.background = "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0"; 
+    document.body.style.minHeight = "100vh";
+    
+    // Force any parent containers to inherit the background
+    const rootElement = document.getElementById('__next');
+    if (rootElement) {
+      rootElement.style.background = "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)";
+      rootElement.style.minHeight = "100vh";
+    }
+    
+    return () => {
+      // Clean up styles when component unmounts
+      document.documentElement.style.background = "";
+      document.documentElement.style.height = "";
+      document.body.style.background = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.minHeight = "";
+      if (rootElement) {
+        rootElement.style.background = "";
+        rootElement.style.minHeight = "";
+      }
+    };
+  }, []);
 
   // Handle message submission
   const handleSendMessage = async () => {
@@ -87,7 +128,17 @@ export default function Dashboard() {
 
       // Generate agent response based on user input
       let responseText = "";
-      if (input.toLowerCase().includes("reward") || input.toLowerCase().includes("earn")) {
+      if (input.toLowerCase().includes("trending") || input.toLowerCase().includes("popular coin")) {
+        responseText = "Based on recent market data, the trending coins this week are ETH, SOL, BONK, WIF, and TROLL. The meme sector is seeing significant growth with new narratives forming.";
+      } else if (input.toLowerCase().includes("market analysis") || input.toLowerCase().includes("market overview")) {
+        responseText = "Current market analysis: BTC dominance is at 52%, overall sentiment is bullish with strong institutional inflows. DeFi TVL has increased 15% this month with Solana ecosystem leading growth.";
+      } else if (input.toLowerCase().includes("defi")) {
+        responseText = "In DeFi news, lending protocols are showing strong growth, with TVL up 22% this month. New yield optimization strategies are emerging with AI-driven rebalancing protocols showing promise.";
+      } else if (input.toLowerCase().includes("nft")) {
+        responseText = "NFT market is seeing renewed interest with dynamic NFTs and AI-generated collections gaining traction. Trading volumes have increased 35% from last month with Solana NFTs leading the charge.";
+      } else if (input.toLowerCase().includes("airdrop")) {
+        responseText = "Notable upcoming airdrops include several Layer 2 protocols and DEX platforms. Projects with strong community engagement and testnet participation are likely to distribute tokens in Q2.";
+      } else if (input.toLowerCase().includes("reward") || input.toLowerCase().includes("earn")) {
         responseText = responses[0];
       } else if (input.toLowerCase().includes("claim")) {
         responseText = responses[1];
@@ -124,12 +175,66 @@ export default function Dashboard() {
     }
   };
 
+  // Completely rewrite the handleQuickQuestion function
+  const handleQuickQuestion = (question: string) => {
+    // Don't proceed if already loading
+    if (isLoading) return;
+    
+    // Create the user message with proper typing
+    const userMessage: MessageType = {
+      id: Date.now().toString(),
+      text: question,
+      sender: "user",
+      timestamp: new Date(),
+    };
+    
+    // Add the user message to the chat
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+    
+    // Determine which response to show based on the question type
+    let responseText = "";
+    
+    // Match the exact strings from the topic questions
+    if (question.includes("trending cryptocurrencies")) {
+      responseText = "Based on recent market data, the trending coins this week are ETH, SOL, BONK, WIF, and TROLL. The meme sector is seeing significant growth with new narratives forming.";
+    } else if (question.includes("market analysis")) {
+      responseText = "Current market analysis: BTC dominance is at 52%, overall sentiment is bullish with strong institutional inflows. DeFi TVL has increased 15% this month with Solana ecosystem leading growth.";
+    } else if (question.includes("DeFi today")) {
+      responseText = "In DeFi news, lending protocols are showing strong growth, with TVL up 22% this month. New yield optimization strategies are emerging with AI-driven rebalancing protocols showing promise.";
+    } else if (question.includes("NFT developments")) {
+      responseText = "NFT market is seeing renewed interest with dynamic NFTs and AI-generated collections gaining traction. Trading volumes have increased 35% from last month with Solana NFTs leading the charge.";
+    } else if (question.includes("upcoming airdrops")) {
+      responseText = "Notable upcoming airdrops include several Layer 2 protocols and DEX platforms. Projects with strong community engagement and testnet participation are likely to distribute tokens in Q2.";
+    }
+    
+    // Set a timeout to simulate AI response time
+    setTimeout(() => {
+      // Create the agent response with proper typing
+      const agentMessage: MessageType = {
+        id: (Date.now() + 1).toString(),
+        text: responseText,
+        sender: "agent",
+        timestamp: new Date(),
+      };
+      
+      // Add the agent message to the chat
+      setMessages(prev => [...prev, agentMessage]);
+      setIsLoading(false);
+    }, 1500);
+  };
+
   return (
     <Container 
+      maxWidth={false}
+      disableGutters
       sx={{ 
-        background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)", 
-        minHeight: "100vh",
-        py: 4,
+        background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%) !important", 
+        minHeight: "100vh !important",
+        width: "100% !important",
+        margin: "0 !important",
+        padding: "2rem !important",
+        boxSizing: "border-box !important",
         color: "#87CEEB",
       }}
     >
@@ -145,6 +250,39 @@ export default function Dashboard() {
         >
           DeFAI Rewards Dashboard
         </Typography>
+
+        {/* Add this right after the DeFAI Rewards Dashboard title (around line 147) */}
+        <Box 
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 1,
+            justifyContent: 'center',
+            mb: 2,
+          }}
+        >
+          {quickTopics.map((topic) => (
+            <Button
+              key={topic.id}
+              variant="outlined"
+              size="small"
+              onClick={() => handleQuickQuestion(topic.question)}
+              sx={{
+                color: "#87CEEB",
+                borderColor: "rgba(135,206,235,0.3)",
+                fontSize: '0.75rem',
+                py: 0.5,
+                borderRadius: 2,
+                "&:hover": {
+                  borderColor: "rgba(135,206,235,0.6)",
+                  bgcolor: "rgba(135,206,235,0.1)",
+                }
+              }}
+            >
+              {topic.label}
+            </Button>
+          ))}
+        </Box>
 
         {/* Chat container */}
         <Paper 
