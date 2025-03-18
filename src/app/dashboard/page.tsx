@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   Box,
   Container,
@@ -12,9 +12,18 @@ import {
   Paper,
   IconButton,
   CircularProgress,
+  Chip,
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { keyframes } from "@mui/system";
+import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { clusterApiUrl } from '@solana/web3.js';
+
+// Import required CSS for the wallet adapter
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 // Animation keyframes
 const pulse = keyframes`
@@ -46,7 +55,41 @@ const quickTopics = [
   { id: "airdrops", label: "Airdrops", question: "What are the best upcoming airdrops?" },
 ];
 
-export default function Dashboard() {
+// Add this before the WalletConnectWrapper function
+interface WalletWrapperProps {
+  children: React.ReactNode;
+}
+
+// Create a wallet wrapper component
+function WalletConnectWrapper({ children }: WalletWrapperProps) {
+  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'
+  const network = WalletAdapterNetwork.Mainnet;
+  
+  // You can also provide a custom endpoint
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
+  // Only use wallets that are working properly with our setup
+  const wallets = useMemo(
+    () => [
+      new PhantomWalletAdapter(),
+      new SolflareWalletAdapter(),
+    ],
+    [network]
+  );
+
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          {children}
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+}
+
+// Dashboard component with wallet capabilities
+function DashboardContent() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([
     {
@@ -58,7 +101,10 @@ export default function Dashboard() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-
+  
+  // Get wallet context
+  const { publicKey, disconnect } = useWallet();
+  
   // Auto-scroll to bottom of messages
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -224,6 +270,30 @@ export default function Dashboard() {
     }, 1500);
   };
 
+  // Handle wallet connect status change to update AI response
+  useEffect(() => {
+    if (publicKey) {
+      // Add a wallet connected message
+      const walletMessage: MessageType = {
+        id: Date.now().toString(),
+        text: `Wallet connected: ${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)}`,
+        sender: "user",
+        timestamp: new Date(),
+      };
+      
+      setTimeout(() => {
+        const agentResponse: MessageType = {
+          id: (Date.now() + 1).toString(),
+          text: `Great! I can now access your reward data. Your wallet ${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)} has been connected to the DeFAI ecosystem.`,
+          sender: "agent",
+          timestamp: new Date(),
+        };
+        
+        setMessages(prev => [...prev, walletMessage, agentResponse]);
+      }, 1000);
+    }
+  }, [publicKey]);
+
   return (
     <Container 
       maxWidth={false}
@@ -238,29 +308,83 @@ export default function Dashboard() {
         color: "#87CEEB",
       }}
     >
-      <Stack spacing={3} sx={{ height: "100%" }}>
+      <Stack spacing={3} sx={{ maxWidth: 800, mx: "auto" }}>
+        {/* Header */}
         <Typography 
           variant="h4" 
-          sx={{
-            fontWeight: "bold",
-            textShadow: "0 0 20px rgba(135,206,235,0.6)",
-            textAlign: "center",
-            mb: 3
+          align="center" 
+          sx={{ 
+            fontFamily: "monospace", 
+            textShadow: "0 0 10px rgba(135,206,235,0.7)",
+            mb: 4,
           }}
         >
           DeFAI Rewards Dashboard
         </Typography>
-
-        {/* Add this right after the DeFAI Rewards Dashboard title (around line 147) */}
+        
+        {/* Wallet Connection */}
         <Box 
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 1,
+          sx={{ 
+            display: 'flex', 
             justifyContent: 'center',
-            mb: 2,
+            alignItems: 'center',
+            mb: 2
           }}
         >
+          {publicKey ? (
+            <Chip
+              icon={<Icon icon="mdi:wallet" />}
+              label={`${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)}`}
+              variant="outlined"
+              onDelete={() => disconnect()}
+              deleteIcon={<Icon icon="mdi:logout" />}
+              sx={{
+                color: '#87CEEB',
+                borderColor: 'rgba(135,206,235,0.5)',
+                bgcolor: 'rgba(135,206,235,0.1)',
+                '& .MuiChip-deleteIcon': {
+                  color: 'rgba(135,206,235,0.7)',
+                  '&:hover': {
+                    color: '#87CEEB',
+                  }
+                },
+              }}
+            />
+          ) : (
+            <Button
+              variant="outlined"
+              startIcon={<Icon icon="mdi:wallet" />}
+              sx={{
+                color: '#87CEEB',
+                borderColor: 'rgba(135,206,235,0.5)',
+                '&:hover': {
+                  borderColor: '#87CEEB',
+                  bgcolor: 'rgba(135,206,235,0.1)',
+                },
+              }}
+              onClick={() => {
+                // The wallet adapter modal will be shown
+                document.querySelector('.wallet-adapter-button')?.dispatchEvent(
+                  new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true,
+                  })
+                );
+              }}
+            >
+              Connect Wallet
+            </Button>
+          )}
+          
+          {/* Hidden wallet button that will be triggered by our custom UI */}
+          <Box sx={{ position: 'absolute', visibility: 'hidden', width: 0, height: 0, overflow: 'hidden' }}>
+            <WalletMultiButton />
+          </Box>
+        </Box>
+
+        {/* Quick Topics */}
+        <Stack direction="row" spacing={1} sx={{ overflowX: "auto", py: 1, px: 2 }}>
           {quickTopics.map((topic) => (
             <Button
               key={topic.id}
@@ -270,20 +394,18 @@ export default function Dashboard() {
               sx={{
                 color: "#87CEEB",
                 borderColor: "rgba(135,206,235,0.3)",
-                fontSize: '0.75rem',
-                py: 0.5,
-                borderRadius: 2,
+                whiteSpace: "nowrap",
                 "&:hover": {
                   borderColor: "rgba(135,206,235,0.6)",
                   bgcolor: "rgba(135,206,235,0.1)",
-                }
+                },
               }}
             >
               {topic.label}
             </Button>
           ))}
-        </Box>
-
+        </Stack>
+        
         {/* Chat container */}
         <Paper 
           elevation={0}
@@ -327,6 +449,7 @@ export default function Dashboard() {
                       bgcolor: "rgba(135,206,235,0.2)",
                       border: "1px solid rgba(135,206,235,0.4)",
                     }}
+                    src="/defaiza.png"
                   >
                     <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>AI</Typography>
                   </Avatar>
@@ -392,6 +515,7 @@ export default function Dashboard() {
                     bgcolor: "rgba(135,206,235,0.2)",
                     border: "1px solid rgba(135,206,235,0.4)",
                   }}
+                  src="/defaiza.png"
                 >
                   <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>AI</Typography>
                 </Avatar>
@@ -496,5 +620,14 @@ export default function Dashboard() {
         </Button>
       </Stack>
     </Container>
+  );
+}
+
+// Main component export that wraps everything in the wallet providers
+export default function Dashboard() {
+  return (
+    <WalletConnectWrapper>
+      <DashboardContent />
+    </WalletConnectWrapper>
   );
 } 

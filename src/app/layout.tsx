@@ -14,8 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Rewards",
-  description: "AI Rewards",
+  title: "DeFAI Rewards",
+  description: "DeFAI Rewards",
+  icons: {
+    icon: [
+      { url: "/defaiza.png" }
+    ],
+    apple: [
+      { url: "/defaiza.png" }
+    ],
+    shortcut: [
+      { url: "/defaiza.png" }
+    ]
+  },
 };
 
 export default function RootLayout({
