@@ -77,6 +77,12 @@ function ClaimContent() {
   const [defaiBalance, setDefaiBalance] = useState<number | null>(null);
   const [airBalance, setAirBalance] = useState<number | null>(null);
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+  const [balanceError, setBalanceError] = useState<string | null>(null);
+  const [claimError, setClaimError] = useState<string | null>(null);
+  const [verificationErrors, setVerificationErrors] = useState({
+    x: null as string | null,
+    telegram: null as string | null
+  });
   
   // Constants for token addresses
   const DEFAI_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_DEFAI_CONTRACT_ADDRESS || '5LGyBHMMPwzMunxhcBMn6ZWAuqoHUQmcFiboTJidFURP';
@@ -120,34 +126,13 @@ function ClaimContent() {
     }
   };
 
-  // Add this new state after other state declarations (around line 76)
+  // Add this new state after other state declarations
   const [userMultipliers, setUserMultipliers] = useState({
     hodl: 1.0,
     volume: 1.0, 
     social: 1.0
   });
   const [showMultipliers, setShowMultipliers] = useState(false);
-
-  // Load token balances
-  useEffect(() => {
-    if (publicKey) {
-      loadTokenBalances();
-    }
-  }, [publicKey]);
-
-  // Update claimable status when social verifications change
-  useEffect(() => {
-    setIsClaimable(xVerified && telegramVerified && !claimed);
-  }, [xVerified, telegramVerified, claimed]);
-
-  // Handle step completion
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   // Function to load token balances
   const loadTokenBalances = useCallback(async () => {
@@ -203,20 +188,46 @@ function ClaimContent() {
       console.error("Error getting token accounts:", error);
       setDefaiBalance(null);
       setAirBalance(null);
+      setBalanceError("Failed to load token balances. Please try again later.");
     } finally {
       setIsLoadingBalance(false);
     }
   }, [publicKey, connection]);
 
+  // Load token balances
+  useEffect(() => {
+    if (publicKey) {
+      loadTokenBalances();
+    }
+  }, [publicKey, loadTokenBalances]);
+
+  // Update claimable status when social verifications change
+  useEffect(() => {
+    setIsClaimable(xVerified && telegramVerified && !claimed);
+  }, [xVerified, telegramVerified, claimed]);
+
+  // Handle step completion
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   // Function to handle X verification
   const verifyX = () => {
-    // In a real app, you would redirect to Twitter OAuth or validate follow status
-    // For demo, we'll simulate this with a timeout
-    window.open('https://twitter.com/elizadotfinance', '_blank');
-    setTimeout(() => {
-      setXVerified(true);
-      if (activeStep === 0) handleNext();
-    }, 2000);
+    try {
+      // In a real app, you would redirect to Twitter OAuth or validate follow status
+      window.open('https://twitter.com/elizadotfinance', '_blank');
+      setTimeout(() => {
+        setXVerified(true);
+        if (activeStep === 0) handleNext();
+      }, 2000);
+    } catch (error) {
+      console.error("Error verifying X:", error);
+      // Consider showing an error message to the user
+    }
   };
 
   // Function to handle Telegram verification
@@ -704,7 +715,7 @@ function ClaimContent() {
               
               {/* Current multiplier summary */}
               <Stack 
-                direction="row" 
+                direction={{ xs: 'column', sm: 'row' }} 
                 spacing={2} 
                 sx={{ 
                   p: 2, 

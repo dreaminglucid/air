@@ -7,7 +7,8 @@
     "build": "next build",
     "build:no-lint": "NEXT_DISABLE_ESLINT=1 next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:no-lint": "NEXT_DISABLE_ESLINT=1 next dev --port 3000 --hostname 0.0.0.0"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

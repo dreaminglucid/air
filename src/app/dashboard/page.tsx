@@ -13,6 +13,8 @@ import {
   IconButton,
   CircularProgress,
   Chip,
+  Grid,
+  LinearProgress,
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { keyframes } from "@mui/system";
@@ -553,6 +555,81 @@ function DashboardContent() {
                 )}
               </Stack>
               
+              {/* AI Financial Advisor Panel */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  mt: 3,
+                  borderRadius: 2,
+                  background: "rgba(0,0,0,0.2)",
+                  backdropFilter: "blur(5px)",
+                  border: "1px solid rgba(135,206,235,0.2)",
+                }}
+              >
+                <Stack spacing={2}>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Avatar sx={{ bgcolor: "rgba(135,206,235,0.2)", color: "#87CEEB" }}>
+                      <Icon icon="mdi:robot-outline" />
+                    </Avatar>
+                    <Typography variant="h6" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
+                      DeFAI Advisor
+                    </Typography>
+                  </Stack>
+                  
+                  <Box sx={{ position: 'relative', py: 2 }}>
+                    <Typography variant="body1" sx={{ color: "#87CEEB", mb: 2 }}>
+                      Based on current market conditions and your holdings, I recommend:
+                    </Typography>
+                    
+                    <Stack spacing={2}>
+                      <Paper sx={{ p: 2, bgcolor: "rgba(135,206,235,0.05)", border: "1px solid rgba(135,206,235,0.1)" }}>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Icon icon="mdi:trending-up" style={{ color: "#4caf50", fontSize: 24 }} />
+                          <Typography sx={{ color: "#87CEEB" }}>
+                            Increase $DEFAI holding before next governance vote
+                          </Typography>
+                        </Stack>
+                      </Paper>
+                      
+                      <Paper sx={{ p: 2, bgcolor: "rgba(135,206,235,0.05)", border: "1px solid rgba(135,206,235,0.1)" }}>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Icon icon="mdi:chart-timeline-variant" style={{ color: "#ff9800", fontSize: 24 }} />
+                          <Typography sx={{ color: "#87CEEB" }}>
+                            Social multiplier activation could yield 15% more rewards
+                          </Typography>
+                        </Stack>
+                      </Paper>
+                      
+                      <Paper sx={{ p: 2, bgcolor: "rgba(135,206,235,0.05)", border: "1px solid rgba(135,206,235,0.1)" }}>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Icon icon="mdi:calendar-clock" style={{ color: "#87CEEB", fontSize: 24 }} />
+                          <Typography sx={{ color: "#87CEEB" }}>
+                            Optimal reward claim time: 48 hours from now
+                          </Typography>
+                        </Stack>
+                      </Paper>
+                    </Stack>
+                    
+                    <Button
+                      variant="outlined"
+                      startIcon={<Icon icon="mdi:auto-fix" />}
+                      sx={{ 
+                        mt: 2,
+                        color: "#87CEEB", 
+                        borderColor: "rgba(135,206,235,0.3)",
+                        "&:hover": { 
+                          bgcolor: "rgba(135,206,235,0.1)",
+                          borderColor: "rgba(135,206,235,0.5)",
+                        }
+                      }}
+                    >
+                      Optimize Strategy
+                    </Button>
+                  </Box>
+                </Stack>
+              </Paper>
+              
               {/* Eligibility check button */}
               <Box sx={{ pt: 1 }}>
                 <Button 
@@ -814,6 +891,102 @@ function DashboardContent() {
           </Box>
         </Paper>
 
+        {/* Learning & Credentials */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mt: 4,
+            borderRadius: 2,
+            background: "rgba(0,0,0,0.2)",
+            backdropFilter: "blur(5px)",
+            border: "1px solid rgba(135,206,235,0.2)",
+          }}
+        >
+          <Stack spacing={3}>
+            <Typography variant="h6" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
+              DeFAI Credentials
+            </Typography>
+            
+            <Grid container spacing={2}>
+              {['Beginner', 'Intermediate', 'Advanced'].map((level, index) => (
+                <Grid item xs={12} md={4} key={level}>
+                  <Paper sx={{ 
+                    p: 2, 
+                    bgcolor: "rgba(0,0,0,0.2)",
+                    border: "1px solid rgba(135,206,235,0.2)",
+                    height: '100%'
+                  }}>
+                    <Stack spacing={2}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Icon 
+                          icon={index === 0 ? "mdi:school-outline" : index === 1 ? "mdi:certificate-outline" : "mdi:trophy-variant-outline"} 
+                          style={{ color: "#87CEEB", fontSize: 24 }} 
+                        />
+                        <Typography variant="subtitle1" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
+                          {level}
+                        </Typography>
+                        <Chip 
+                          label={index === 0 ? "Completed" : index === 1 ? "In Progress" : "Locked"} 
+                          size="small"
+                          sx={{ 
+                            ml: 'auto',
+                            bgcolor: index === 0 
+                              ? "rgba(46, 125, 50, 0.2)" 
+                              : index === 1 
+                                ? "rgba(255, 152, 0, 0.1)" 
+                                : "rgba(135,206,235,0.05)",
+                            color: index === 0 
+                              ? "#4caf50" 
+                              : index === 1 
+                                ? "#ff9800" 
+                                : "rgba(135,206,235,0.7)",
+                            border: index === 0 
+                              ? "1px solid rgba(46, 125, 50, 0.3)" 
+                              : index === 1 
+                                ? "1px solid rgba(255, 152, 0, 0.3)" 
+                                : "1px solid rgba(135,206,235,0.1)",
+                          }} 
+                        />
+                      </Stack>
+                      
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={index === 0 ? 100 : index === 1 ? 60 : 0} 
+                        sx={{
+                          bgcolor: "rgba(135,206,235,0.1)",
+                          "& .MuiLinearProgress-bar": { bgcolor: "#87CEEB" }
+                        }}
+                      />
+                      
+                      <Typography variant="body2" sx={{ color: "rgba(135,206,235,0.7)" }}>
+                        {index === 0 
+                          ? "You've mastered the basics of DeFAI tokenomics and earned a 1.1x multiplier." 
+                          : index === 1 
+                            ? "Complete 2 more advanced tasks to unlock a 1.25x multiplier." 
+                            : "Advanced credentials unlock a 1.5x permanent multiplier."
+                        }
+                      </Typography>
+                      
+                      <Button 
+                        size="small" 
+                        endIcon={<Icon icon="mdi:arrow-right" />}
+                        sx={{ 
+                          alignSelf: 'flex-start',
+                          color: "#87CEEB",
+                          "&:hover": { bgcolor: "rgba(135,206,235,0.1)" }
+                        }}
+                      >
+                        {index === 0 ? "Review" : index === 1 ? "Continue" : "Start"}
+                      </Button>
+                    </Stack>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+        </Paper>
+
         {/* Navigation buttons */}
         <Stack direction="row" spacing={2} sx={{ alignSelf: "center", mt: 2 }}>
           <Button
@@ -848,6 +1021,23 @@ function DashboardContent() {
             }}
           >
             Vote & Governance
+          </Button>
+          
+          <Button
+            variant="outlined"
+            component="a"
+            href="/dashboard/analytics"
+            startIcon={<Icon icon="mdi:chart-box" />}
+            sx={{ 
+              color: "#87CEEB", 
+              borderColor: "rgba(135,206,235,0.3)",
+              "&:hover": {
+                borderColor: "rgba(135,206,235,0.6)",
+                bgcolor: "rgba(135,206,235,0.1)",
+              }
+            }}
+          >
+            Analytics
           </Button>
           
           <Button

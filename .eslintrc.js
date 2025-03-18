@@ -2,6 +2,14 @@ module.exports = {
   extends: ['next/core-web-api'],
   // Very important: specify the root property to true
   root: true,
+  // Add parser options to help with TypeScript
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
   rules: {
     'react/jsx-no-comment-textnodes': 'off',
     'react/no-unescaped-entities': 'off',
