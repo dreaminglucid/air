@@ -814,25 +814,59 @@ function DashboardContent() {
           </Box>
         </Paper>
 
-        {/* Navigation back to home */}
-        <Button
-          variant="outlined"
-          component="a"
-          href="/"
-          startIcon={<Icon icon="mdi:arrow-left" />}
-          sx={{ 
-            color: "#87CEEB", 
-            borderColor: "rgba(135,206,235,0.3)",
-            alignSelf: "center",
-            mt: 2,
-            "&:hover": {
-              borderColor: "rgba(135,206,235,0.6)",
-              bgcolor: "rgba(135,206,235,0.1)",
-            }
-          }}
-        >
-          Back to Home
-        </Button>
+        {/* Navigation buttons */}
+        <Stack direction="row" spacing={2} sx={{ alignSelf: "center", mt: 2 }}>
+          <Button
+            variant="outlined"
+            component="a"
+            href="/dashboard/claim"
+            startIcon={<Icon icon="mdi:gift" />}
+            sx={{ 
+              color: "#87CEEB", 
+              borderColor: "rgba(135,206,235,0.3)",
+              "&:hover": {
+                borderColor: "rgba(135,206,235,0.6)",
+                bgcolor: "rgba(135,206,235,0.1)",
+              }
+            }}
+          >
+            Claim Airdrop
+          </Button>
+          
+          <Button
+            variant="outlined"
+            component="a"
+            href="/dashboard/vote"
+            startIcon={<Icon icon="mdi:vote" />}
+            sx={{ 
+              color: "#87CEEB", 
+              borderColor: "rgba(135,206,235,0.3)",
+              "&:hover": {
+                borderColor: "rgba(135,206,235,0.6)",
+                bgcolor: "rgba(135,206,235,0.1)",
+              }
+            }}
+          >
+            Vote & Governance
+          </Button>
+          
+          <Button
+            variant="outlined"
+            component="a"
+            href="/"
+            startIcon={<Icon icon="mdi:arrow-left" />}
+            sx={{ 
+              color: "#87CEEB", 
+              borderColor: "rgba(135,206,235,0.3)",
+              "&:hover": {
+                borderColor: "rgba(135,206,235,0.6)",
+                bgcolor: "rgba(135,206,235,0.1)",
+              }
+            }}
+          >
+            Back to Home
+          </Button>
+        </Stack>
       </Stack>
     </Container>
   );
