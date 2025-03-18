@@ -40,6 +40,7 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adap
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl, PublicKey } from '@solana/web3.js';
 import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
 
 // Import wallet adapter styles
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -314,30 +315,9 @@ function VoteContent() {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Stack spacing={4}>
         {/* Header */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
-            DeFAI Governance
-          </Typography>
-          
-          <Stack direction="row" spacing={2}>
-            <Button 
-              component={Link} 
-              href="/dashboard" 
-              variant="outlined"
-              startIcon={<Icon icon="mdi:arrow-left" />}
-              sx={{ 
-                color: "#87CEEB", 
-                borderColor: "rgba(135,206,235,0.3)",
-                "&:hover": { 
-                  bgcolor: "rgba(135,206,235,0.1)",
-                  borderColor: "rgba(135,206,235,0.5)",
-                }
-              }}
-            >
-              Dashboard
-            </Button>
-          </Stack>
-        </Stack>
+        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
+          DeFAI Governance
+        </Typography>
         
         {/* Wallet Connection Section */}
         {!publicKey ? (
@@ -946,7 +926,9 @@ function VoteContent() {
 export default function VotePage() {
   return (
     <WalletConnectWrapper>
-      <VoteContent />
+      <DashboardLayout>
+        <VoteContent />
+      </DashboardLayout>
     </WalletConnectWrapper>
   );
 } 

@@ -15,6 +15,12 @@ import {
   Chip,
   Grid,
   LinearProgress,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { keyframes } from "@mui/system";
@@ -25,6 +31,9 @@ import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-r
 import { clusterApiUrl, PublicKey } from '@solana/web3.js';
 import { AccountLayout } from '@solana/spl-token';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import DashboardLayout from '@/components/DashboardLayout';
 
 // Import required CSS for the wallet adapter
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -368,34 +377,13 @@ function DashboardContent() {
     }, 1500);
   };
 
+  const pathname = usePathname();
+
   return (
-    <Container 
-      maxWidth={false}
-      disableGutters
-      sx={{ 
-        background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%) !important", 
-        minHeight: "100vh !important",
-        width: "100% !important",
-        margin: "0 !important",
-        padding: { xs: "1rem", sm: "2rem" }, // Responsive padding
-        boxSizing: "border-box !important",
-        color: "#87CEEB",
-        overflowX: "hidden", // Prevent horizontal scrolling
-      }}
-    >
-      <Stack spacing={3} sx={{ maxWidth: 800, mx: "auto" }}>
-        {/* Header - Smaller on mobile */}
-        <Typography 
-          variant="h4" 
-          align="center" 
-          sx={{ 
-            fontFamily: "monospace", 
-            textShadow: "0 0 10px rgba(135,206,235,0.7)",
-            mb: { xs: 2, sm: 4 },
-            fontSize: { xs: "1.75rem", sm: "2.125rem" },
-            color: "#87CEEB"
-          }}
-        >
+    <Box sx={{ width: '100%' }}>
+      {/* Header */}
+      <Stack spacing={4}>
+        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
           DeFAI Rewards Dashboard
         </Typography>
         
@@ -404,7 +392,6 @@ function DashboardContent() {
           <Paper
             elevation={0}
             sx={{
-              mt: 2,
               p: 3,
               bgcolor: "rgba(0,0,0,0.3)",
               backdropFilter: "blur(5px)",
@@ -892,173 +879,232 @@ function DashboardContent() {
         </Paper>
 
         {/* Learning & Credentials */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: 3,
-            mt: 4,
-            borderRadius: 2,
-            background: "rgba(0,0,0,0.2)",
-            backdropFilter: "blur(5px)",
-            border: "1px solid rgba(135,206,235,0.2)",
-          }}
-        >
-          <Stack spacing={3}>
-            <Typography variant="h6" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
-              DeFAI Credentials
-            </Typography>
-            
-            <Grid container spacing={2}>
-              {['Beginner', 'Intermediate', 'Advanced'].map((level, index) => (
-                <Grid item xs={12} md={4} key={level}>
-                  <Paper sx={{ 
-                    p: 2, 
-                    bgcolor: "rgba(0,0,0,0.2)",
-                    border: "1px solid rgba(135,206,235,0.2)",
-                    height: '100%'
-                  }}>
-                    <Stack spacing={2}>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Icon 
-                          icon={index === 0 ? "mdi:school-outline" : index === 1 ? "mdi:certificate-outline" : "mdi:trophy-variant-outline"} 
-                          style={{ color: "#87CEEB", fontSize: 24 }} 
-                        />
-                        <Typography variant="subtitle1" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
-                          {level}
-                        </Typography>
-                        <Chip 
-                          label={index === 0 ? "Completed" : index === 1 ? "In Progress" : "Locked"} 
-                          size="small"
-                          sx={{ 
-                            ml: 'auto',
-                            bgcolor: index === 0 
-                              ? "rgba(46, 125, 50, 0.2)" 
-                              : index === 1 
-                                ? "rgba(255, 152, 0, 0.1)" 
-                                : "rgba(135,206,235,0.05)",
-                            color: index === 0 
-                              ? "#4caf50" 
-                              : index === 1 
-                                ? "#ff9800" 
-                                : "rgba(135,206,235,0.7)",
-                            border: index === 0 
-                              ? "1px solid rgba(46, 125, 50, 0.3)" 
-                              : index === 1 
-                                ? "1px solid rgba(255, 152, 0, 0.3)" 
-                                : "1px solid rgba(135,206,235,0.1)",
-                          }} 
-                        />
-                      </Stack>
-                      
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={index === 0 ? 100 : index === 1 ? 60 : 0} 
-                        sx={{
-                          bgcolor: "rgba(135,206,235,0.1)",
-                          "& .MuiLinearProgress-bar": { bgcolor: "#87CEEB" }
-                        }}
-                      />
-                      
-                      <Typography variant="body2" sx={{ color: "rgba(135,206,235,0.7)" }}>
-                        {index === 0 
-                          ? "You've mastered the basics of DeFAI tokenomics and earned a 1.1x multiplier." 
-                          : index === 1 
-                            ? "Complete 2 more advanced tasks to unlock a 1.25x multiplier." 
-                            : "Advanced credentials unlock a 1.5x permanent multiplier."
-                        }
-                      </Typography>
-                      
-                      <Button 
-                        size="small" 
-                        endIcon={<Icon icon="mdi:arrow-right" />}
-                        sx={{ 
-                          alignSelf: 'flex-start',
-                          color: "#87CEEB",
-                          "&:hover": { bgcolor: "rgba(135,206,235,0.1)" }
-                        }}
-                      >
-                        {index === 0 ? "Review" : index === 1 ? "Continue" : "Start"}
-                      </Button>
-                    </Stack>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
-        </Paper>
+        <Box sx={{ width: '100%', mt: 4 }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: "bold",
+              color: "#87CEEB",
+              mb: 3,
+            }}
+          >
+            DeFAI Credentials
+          </Typography>
 
-        {/* Navigation buttons */}
-        <Stack direction="row" spacing={2} sx={{ alignSelf: "center", mt: 2 }}>
-          <Button
-            variant="outlined"
-            component="a"
-            href="/dashboard/claim"
-            startIcon={<Icon icon="mdi:gift" />}
-            sx={{ 
-              color: "#87CEEB", 
-              borderColor: "rgba(135,206,235,0.3)",
-              "&:hover": {
-                borderColor: "rgba(135,206,235,0.6)",
-                bgcolor: "rgba(135,206,235,0.1)",
-              }
-            }}
-          >
-            Claim Airdrop
-          </Button>
-          
-          <Button
-            variant="outlined"
-            component="a"
-            href="/dashboard/vote"
-            startIcon={<Icon icon="mdi:vote" />}
-            sx={{ 
-              color: "#87CEEB", 
-              borderColor: "rgba(135,206,235,0.3)",
-              "&:hover": {
-                borderColor: "rgba(135,206,235,0.6)",
-                bgcolor: "rgba(135,206,235,0.1)",
-              }
-            }}
-          >
-            Vote & Governance
-          </Button>
-          
-          <Button
-            variant="outlined"
-            component="a"
-            href="/dashboard/analytics"
-            startIcon={<Icon icon="mdi:chart-box" />}
-            sx={{ 
-              color: "#87CEEB", 
-              borderColor: "rgba(135,206,235,0.3)",
-              "&:hover": {
-                borderColor: "rgba(135,206,235,0.6)",
-                bgcolor: "rgba(135,206,235,0.1)",
-              }
-            }}
-          >
-            Analytics
-          </Button>
-          
-          <Button
-            variant="outlined"
-            component="a"
-            href="/"
-            startIcon={<Icon icon="mdi:arrow-left" />}
-            sx={{ 
-              color: "#87CEEB", 
-              borderColor: "rgba(135,206,235,0.3)",
-              "&:hover": {
-                borderColor: "rgba(135,206,235,0.6)",
-                bgcolor: "rgba(135,206,235,0.1)",
-              }
-            }}
-          >
-            Back to Home
-          </Button>
-        </Stack>
+          <Grid container spacing={3}>
+            {/* Beginner Card */}
+            <Grid item xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: "rgba(0,0,0,0.2)",
+                  backdropFilter: "blur(5px)",
+                  border: "1px solid rgba(135,206,235,0.2)",
+                  borderRadius: 2
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                  <Icon icon="mdi:school" style={{ color: "#87CEEB", width: 24, height: 24 }} />
+                  <Typography variant="h6" sx={{ color: "#87CEEB", flexGrow: 1 }}>
+                    Beginner
+                  </Typography>
+                  <Chip 
+                    label="Completed" 
+                    sx={{ 
+                      bgcolor: "rgba(0,128,0,0.2)", 
+                      color: "#00C853",
+                      borderRadius: '16px'
+                    }} 
+                  />
+                </Stack>
+                
+                <Box sx={{ width: '100%', mb: 3 }}>
+                  <LinearProgress 
+                    variant="determinate" 
+                    value={100} 
+                    sx={{ 
+                      height: 8, 
+                      borderRadius: 4,
+                      bgcolor: 'rgba(135,206,235,0.1)',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: '#87CEEB'
+                      }
+                    }} 
+                  />
+                </Box>
+                
+                <Typography sx={{ color: "rgba(135,206,235,0.8)", mb: 3, flexGrow: 1 }}>
+                  You've mastered the basics of DeFAI tokenomics and earned a 1.1x multiplier.
+                </Typography>
+                
+                <Button
+                  variant="outlined"
+                  endIcon={<Icon icon="mdi:arrow-right" />}
+                  sx={{ 
+                    color: "#87CEEB", 
+                    borderColor: "rgba(135,206,235,0.3)",
+                    alignSelf: 'flex-start',
+                    "&:hover": {
+                      borderColor: "rgba(135,206,235,0.6)",
+                      bgcolor: "rgba(135,206,235,0.1)",
+                    }
+                  }}
+                >
+                  REVIEW
+                </Button>
+              </Paper>
+            </Grid>
+            
+            {/* Intermediate Card */}
+            <Grid item xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: "rgba(0,0,0,0.2)",
+                  backdropFilter: "blur(5px)",
+                  border: "1px solid rgba(135,206,235,0.2)",
+                  borderRadius: 2
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                  <Icon icon="mdi:chart-line" style={{ color: "#87CEEB", width: 24, height: 24 }} />
+                  <Typography variant="h6" sx={{ color: "#87CEEB", flexGrow: 1 }}>
+                    Intermediate
+                  </Typography>
+                  <Chip 
+                    label="In Progress" 
+                    sx={{ 
+                      bgcolor: "rgba(255,152,0,0.2)", 
+                      color: "#FFA726",
+                      borderRadius: '16px'
+                    }} 
+                  />
+                </Stack>
+                
+                <Box sx={{ width: '100%', mb: 3 }}>
+                  <LinearProgress 
+                    variant="determinate" 
+                    value={60} 
+                    sx={{ 
+                      height: 8, 
+                      borderRadius: 4,
+                      bgcolor: 'rgba(135,206,235,0.1)',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: '#87CEEB'
+                      }
+                    }} 
+                  />
+                </Box>
+                
+                <Typography sx={{ color: "rgba(135,206,235,0.8)", mb: 3, flexGrow: 1 }}>
+                  Complete 2 more advanced tasks to unlock a 1.25x multiplier.
+                </Typography>
+                
+                <Button
+                  variant="outlined"
+                  endIcon={<Icon icon="mdi:arrow-right" />}
+                  sx={{ 
+                    color: "#87CEEB", 
+                    borderColor: "rgba(135,206,235,0.3)",
+                    alignSelf: 'flex-start',
+                    "&:hover": {
+                      borderColor: "rgba(135,206,235,0.6)",
+                      bgcolor: "rgba(135,206,235,0.1)",
+                    }
+                  }}
+                >
+                  CONTINUE
+                </Button>
+              </Paper>
+            </Grid>
+            
+            {/* Advanced Card */}
+            <Grid item xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: "rgba(0,0,0,0.2)",
+                  backdropFilter: "blur(5px)",
+                  border: "1px solid rgba(135,206,235,0.2)",
+                  borderRadius: 2
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                  <Icon icon="mdi:trophy" style={{ color: "#87CEEB", width: 24, height: 24 }} />
+                  <Typography variant="h6" sx={{ color: "#87CEEB", flexGrow: 1 }}>
+                    Advanced
+                  </Typography>
+                  <Chip 
+                    label="Locked" 
+                    sx={{ 
+                      bgcolor: "rgba(100,100,100,0.2)", 
+                      color: "#9E9E9E",
+                      borderRadius: '16px'
+                    }} 
+                  />
+                </Stack>
+                
+                <Box sx={{ width: '100%', mb: 3 }}>
+                  <LinearProgress 
+                    variant="determinate" 
+                    value={0} 
+                    sx={{ 
+                      height: 8, 
+                      borderRadius: 4,
+                      bgcolor: 'rgba(135,206,235,0.1)',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: '#87CEEB'
+                      }
+                    }} 
+                  />
+                </Box>
+                
+                <Typography sx={{ color: "rgba(135,206,235,0.8)", mb: 3, flexGrow: 1 }}>
+                  Advanced credentials unlock a 1.5x permanent multiplier.
+                </Typography>
+                
+                <Button
+                  variant="outlined"
+                  endIcon={<Icon icon="mdi:arrow-right" />}
+                  disabled
+                  sx={{ 
+                    color: "#87CEEB", 
+                    borderColor: "rgba(135,206,235,0.3)",
+                    alignSelf: 'flex-start',
+                    "&:hover": {
+                      borderColor: "rgba(135,206,235,0.6)",
+                      bgcolor: "rgba(135,206,235,0.1)",
+                    },
+                    "&.Mui-disabled": {
+                      color: "rgba(135,206,235,0.5)",
+                      borderColor: "rgba(135,206,235,0.1)",
+                    }
+                  }}
+                >
+                  START
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Footer */}
+        <Box sx={{ mt: 4, textAlign: 'center', color: 'rgba(135,206,235,0.5)' }}>
+          <Typography variant="body2">
+            DeFAI Dashboard v1.0
+          </Typography>
+        </Box>
       </Stack>
-    </Container>
+    </Box>
   );
 }
 
@@ -1066,7 +1112,9 @@ function DashboardContent() {
 export default function Dashboard() {
   return (
     <WalletConnectWrapper>
-      <DashboardContent />
+      <DashboardLayout>
+        <DashboardContent />
+      </DashboardLayout>
     </WalletConnectWrapper>
   );
 } 

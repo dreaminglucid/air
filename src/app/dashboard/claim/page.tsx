@@ -29,6 +29,7 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adap
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl, PublicKey } from '@solana/web3.js';
 import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
 
 // Import wallet adapter styles
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -281,33 +282,12 @@ function ClaimContent() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ width: '100%' }}>
       {/* Header */}
       <Stack spacing={4}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
-            DeFAI Airdrop
-          </Typography>
-          
-          <Stack direction="row" spacing={2}>
-            <Button 
-              component={Link} 
-              href="/dashboard" 
-              variant="outlined"
-              startIcon={<Icon icon="mdi:arrow-left" />}
-              sx={{ 
-                color: "#87CEEB", 
-                borderColor: "rgba(135,206,235,0.3)",
-                "&:hover": { 
-                  bgcolor: "rgba(135,206,235,0.1)",
-                  borderColor: "rgba(135,206,235,0.5)",
-                }
-              }}
-            >
-              Dashboard
-            </Button>
-          </Stack>
-        </Stack>
+        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
+          DeFAI Airdrop
+        </Typography>
         
         {/* Wallet Connection Section */}
         {!publicKey ? (
@@ -863,7 +843,7 @@ function ClaimContent() {
           </Stack>
         )}
       </Stack>
-    </Container>
+    </Box>
   );
 }
 
@@ -871,7 +851,9 @@ function ClaimContent() {
 export default function ClaimPage() {
   return (
     <WalletConnectWrapper>
-      <ClaimContent />
+      <DashboardLayout>
+        <ClaimContent />
+      </DashboardLayout>
     </WalletConnectWrapper>
   );
 } 

@@ -23,6 +23,12 @@ import {
   TableRow,
   Grid,
   Alert,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { ConnectionProvider, WalletProvider, useWallet, useConnection } from '@solana/wallet-adapter-react';
@@ -30,7 +36,8 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl, PublicKey } from '@solana/web3.js';
-import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
+import { usePathname } from 'next/navigation';
 
 // Import wallet adapter styles
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -93,6 +100,7 @@ interface TokenAnalytics {
 function AnalyticsContent() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
+  const pathname = usePathname();
 
   // States for different data sections
   const [tabValue, setTabValue] = useState(0);
@@ -429,37 +437,12 @@ function AnalyticsContent() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ width: '100%' }}>
       {/* Header */}
       <Stack spacing={4}>
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          justifyContent="space-between"
-          alignItems={{ xs: 'flex-start', sm: 'center' }}
-        >
-          <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
-            Analytics Dashboard
-          </Typography>
-          
-          <Stack direction="row" spacing={2}>
-            <Button 
-              component={Link} 
-              href="/dashboard" 
-              variant="outlined"
-              startIcon={<Icon icon="mdi:arrow-left" />}
-              sx={{ 
-                color: "#87CEEB", 
-                borderColor: "rgba(135,206,235,0.3)",
-                "&:hover": { 
-                  bgcolor: "rgba(135,206,235,0.1)",
-                  borderColor: "rgba(135,206,235,0.5)",
-                }
-              }}
-            >
-              Dashboard
-            </Button>
-          </Stack>
-        </Stack>
+        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
+          Analytics Dashboard
+        </Typography>
         
         {/* Wallet Connection Section */}
         {!publicKey ? (
@@ -835,7 +818,7 @@ function AnalyticsContent() {
           </Stack>
         )}
       </Stack>
-    </Container>
+    </Box>
   );
 }
 
@@ -843,7 +826,9 @@ function AnalyticsContent() {
 export default function AnalyticsPage() {
   return (
     <WalletConnectWrapper>
-      <AnalyticsContent />
+      <DashboardLayout>
+        <AnalyticsContent />
+      </DashboardLayout>
     </WalletConnectWrapper>
   );
 } 
