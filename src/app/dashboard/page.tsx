@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
   Box,
   Container,
@@ -16,14 +16,26 @@ import {
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { keyframes } from "@mui/system";
-import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
+import { ConnectionProvider, WalletProvider, useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
+import { clusterApiUrl, PublicKey } from '@solana/web3.js';
+import { AccountLayout } from '@solana/spl-token';
+import dynamic from 'next/dynamic';
 
 // Import required CSS for the wallet adapter
 import '@solana/wallet-adapter-react-ui/styles.css';
+
+// Dynamic import of wallet components to prevent hydration mismatch
+const WalletMultiButtonDynamic = dynamic(
+  async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
+  { ssr: false }
+);
+
+// Add this constant near the top of the file, after imports
+// Define TOKEN_PROGRAM_ID as a constant to avoid dependency on spl-token
+const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
 // Animation keyframes
 const pulse = keyframes`
@@ -60,22 +72,15 @@ interface WalletWrapperProps {
   children: React.ReactNode;
 }
 
-// Create a wallet wrapper component
+// Update the WalletConnectWrapper for better reliability
 function WalletConnectWrapper({ children }: WalletWrapperProps) {
-  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Mainnet;
+  // Ensure we have a valid endpoint
+  const endpoint = process.env.NEXT_PUBLIC_HELIUS_RPC_URL || clusterApiUrl('mainnet-beta');
   
-  // You can also provide a custom endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
-  // Only use wallets that are working properly with our setup
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-    ],
-    [network]
-  );
+  const wallets = useMemo(() => [
+    new PhantomWalletAdapter(), 
+    new SolflareWalletAdapter()
+  ], []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
@@ -90,6 +95,7 @@ function WalletConnectWrapper({ children }: WalletWrapperProps) {
 
 // Dashboard component with wallet capabilities
 function DashboardContent() {
+  // First, declare all states
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([
     {
@@ -101,10 +107,100 @@ function DashboardContent() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const [defaiBalance, setDefaiBalance] = useState<string | null>(null);
+  const [airBalance, setAirBalance] = useState<string | null>(null);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
   
   // Get wallet context
+  const { connection } = useConnection();
   const { publicKey, disconnect } = useWallet();
   
+  // Add token constants using environment variables
+  const DEFAI_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_DEFAI_CONTRACT_ADDRESS || "5LGyBHMMPwzMunxhcBMn6ZWAuqoHUQmcFiboTJidFURP";
+  const AIR_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_AIR_CONTRACT_ADDRESS || "cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij";
+  
+  // Define fetchTokenBalances BEFORE using it in useEffect
+  const fetchTokenBalances = useCallback(async () => {
+    if (!publicKey || !connection) {
+      setDefaiBalance(null);
+      setAirBalance(null);
+      return;
+    }
+    
+    try {
+      setIsLoadingBalance(true);
+      setDefaiBalance("Loading...");
+      setAirBalance("Loading...");
+      
+      // Use a more direct approach with Helius
+      const heliusEndpoint = process.env.NEXT_PUBLIC_HELIUS_RPC_URL || '';
+      
+      // Create a simple fetch to Helius directly to get token balances
+      const response = await fetch(heliusEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'helius-token-balances',
+          method: 'getTokenAccountsByOwner',
+          params: [
+            publicKey.toString(),
+            { programId: TOKEN_PROGRAM_ID.toString() },
+            { encoding: 'jsonParsed' }
+          ]
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(JSON.stringify(data.error));
+      }
+      
+      let defaiAmt = "0";
+      let airAmt = "0";
+      
+      // Parse the response from Helius
+      if (data.result && data.result.value) {
+        for (const item of data.result.value) {
+          const accountInfo = item.account.data.parsed.info;
+          const mintAddress = accountInfo.mint;
+          
+          if (mintAddress === DEFAI_TOKEN_ADDRESS) {
+            defaiAmt = accountInfo.tokenAmount.uiAmount?.toString() || "0";
+          } else if (mintAddress === AIR_TOKEN_ADDRESS) {
+            airAmt = accountInfo.tokenAmount.uiAmount?.toString() || "0";
+          }
+        }
+      }
+      
+      setDefaiBalance(defaiAmt);
+      setAirBalance(airAmt);
+    } catch (error) {
+      console.error("Error getting token accounts:", error);
+      setDefaiBalance("Error");
+      setAirBalance("Error");
+    } finally {
+      setIsLoadingBalance(false);
+    }
+  }, [publicKey, connection, DEFAI_TOKEN_ADDRESS, AIR_TOKEN_ADDRESS]);
+
+  // Now use the function in useEffect
+  useEffect(() => {
+    if (publicKey) {
+      fetchTokenBalances();
+      
+      // Add a wallet connected message with proper typing
+      const walletMessage: MessageType = {
+        id: Date.now().toString(),
+        text: `Wallet connected! Checking for token balances...`,
+        sender: "agent", 
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, walletMessage]);
+    }
+  }, [publicKey, fetchTokenBalances]);
+
   // Auto-scroll to bottom of messages
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -270,30 +366,6 @@ function DashboardContent() {
     }, 1500);
   };
 
-  // Handle wallet connect status change to update AI response
-  useEffect(() => {
-    if (publicKey) {
-      // Add a wallet connected message
-      const walletMessage: MessageType = {
-        id: Date.now().toString(),
-        text: `Wallet connected: ${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)}`,
-        sender: "user",
-        timestamp: new Date(),
-      };
-      
-      setTimeout(() => {
-        const agentResponse: MessageType = {
-          id: (Date.now() + 1).toString(),
-          text: `Great! I can now access your reward data. Your wallet ${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)} has been connected to the DeFAI ecosystem.`,
-          sender: "agent",
-          timestamp: new Date(),
-        };
-        
-        setMessages(prev => [...prev, walletMessage, agentResponse]);
-      }, 1000);
-    }
-  }, [publicKey]);
-
   return (
     <Container 
       maxWidth={false}
@@ -303,143 +375,285 @@ function DashboardContent() {
         minHeight: "100vh !important",
         width: "100% !important",
         margin: "0 !important",
-        padding: "2rem !important",
+        padding: { xs: "1rem", sm: "2rem" }, // Responsive padding
         boxSizing: "border-box !important",
         color: "#87CEEB",
+        overflowX: "hidden", // Prevent horizontal scrolling
       }}
     >
       <Stack spacing={3} sx={{ maxWidth: 800, mx: "auto" }}>
-        {/* Header */}
+        {/* Header - Smaller on mobile */}
         <Typography 
           variant="h4" 
           align="center" 
           sx={{ 
             fontFamily: "monospace", 
             textShadow: "0 0 10px rgba(135,206,235,0.7)",
-            mb: 4,
+            mb: { xs: 2, sm: 4 },
+            fontSize: { xs: "1.75rem", sm: "2.125rem" },
+            color: "#87CEEB"
           }}
         >
           DeFAI Rewards Dashboard
         </Typography>
         
         {/* Wallet Connection */}
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'center',
-            alignItems: 'center',
-            mb: 2
-          }}
-        >
-          {publicKey ? (
-            <Chip
-              icon={<Icon icon="mdi:wallet" />}
-              label={`${publicKey.toString().slice(0, 6)}...${publicKey.toString().slice(-4)}`}
-              variant="outlined"
-              onDelete={() => disconnect()}
-              deleteIcon={<Icon icon="mdi:logout" />}
-              sx={{
-                color: '#87CEEB',
-                borderColor: 'rgba(135,206,235,0.5)',
-                bgcolor: 'rgba(135,206,235,0.1)',
-                '& .MuiChip-deleteIcon': {
-                  color: 'rgba(135,206,235,0.7)',
-                  '&:hover': {
-                    color: '#87CEEB',
-                  }
-                },
+        {!publicKey ? (
+          <Paper
+            elevation={0}
+            sx={{
+              mt: 2,
+              p: 3,
+              bgcolor: "rgba(0,0,0,0.3)",
+              backdropFilter: "blur(5px)",
+              border: "1px solid rgba(135,206,235,0.2)",
+              textAlign: "center"
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ mb: 2, color: "#87CEEB" }}>
+              Connect your wallet to view your rewards
+            </Typography>
+            
+            {/* Use the WalletMultiButton directly with custom styling */}
+            <WalletMultiButton 
+              style={{
+                backgroundColor: "rgba(135,206,235,0.2)",
+                color: "#87CEEB",
+                border: "1px solid rgba(135,206,235,0.4)",
+                padding: "12px 24px",
+                borderRadius: "8px",
+                fontFamily: "inherit",
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             />
-          ) : (
-            <Button
-              variant="outlined"
-              startIcon={<Icon icon="mdi:wallet" />}
-              sx={{
-                color: '#87CEEB',
-                borderColor: 'rgba(135,206,235,0.5)',
-                '&:hover': {
-                  borderColor: '#87CEEB',
-                  bgcolor: 'rgba(135,206,235,0.1)',
-                },
-              }}
-              onClick={() => {
-                // The wallet adapter modal will be shown
-                document.querySelector('.wallet-adapter-button')?.dispatchEvent(
-                  new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true,
-                  })
-                );
-              }}
-            >
-              Connect Wallet
-            </Button>
-          )}
-          
-          {/* Hidden wallet button that will be triggered by our custom UI */}
-          <Box sx={{ position: 'absolute', visibility: 'hidden', width: 0, height: 0, overflow: 'hidden' }}>
-            <WalletMultiButton />
-          </Box>
-        </Box>
+          </Paper>
+        ) : (
+          <Paper
+            elevation={0}
+            sx={{
+              mt: 2,
+              p: 3,
+              borderRadius: 2,
+              background: "rgba(0,0,0,0.2)",
+              backdropFilter: "blur(5px)",
+              border: "1px solid rgba(135,206,235,0.2)",
+            }}
+          >
+            <Stack spacing={2}>
+              {/* Wallet header with disconnect button */}
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#87CEEB" }}>
+                  Connected Wallet
+                </Typography>
+                <Button
+                  size="small"
+                  startIcon={<Icon icon="mdi:logout" />}
+                  onClick={() => disconnect()}
+                  sx={{
+                    color: "rgba(135,206,235,0.7)",
+                    "&:hover": {
+                      color: "#87CEEB",
+                      bgcolor: "rgba(135,206,235,0.1)",
+                    }
+                  }}
+                >
+                  Disconnect
+                </Button>
+              </Stack>
+              
+              {/* Wallet address */}
+              <Box sx={{ 
+                p: 1.5, 
+                borderRadius: 1.5, 
+                bgcolor: "rgba(0,0,0,0.3)", 
+                border: "1px solid rgba(135,206,235,0.15)",
+              }}>
+                <Typography variant="caption" sx={{ opacity: 0.7 }}>
+                  Wallet Address
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ fontWeight: "bold", fontFamily: "var(--font-geist-mono)", color: "#87CEEB" }}
+                >
+                  {publicKey.toString().slice(0, 16)}...{publicKey.toString().slice(-8)}
+                </Typography>
+              </Box>
+              
+              {/* Token balances */}
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
+                  Token Balances
+                </Typography>
+                
+                {isLoadingBalance ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+                    <CircularProgress size={24} sx={{ color: "#87CEEB" }} />
+                  </Box>
+                ) : (
+                  <Stack spacing={1}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      p: 1.5, 
+                      borderRadius: 1.5, 
+                      bgcolor: "rgba(135,206,235,0.05)",
+                      border: "1px solid rgba(135,206,235,0.1)"
+                    }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Avatar 
+                          sx={{ 
+                            width: 24, 
+                            height: 24, 
+                            bgcolor: 'rgba(135,206,235,0.2)',
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          D
+                        </Avatar>
+                        <Typography variant="body2" sx={{ color: "#87CEEB" }}>DEFAI</Typography>
+                      </Stack>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: "#87CEEB" }}>
+                        {defaiBalance === null ? '0' : defaiBalance}
+                      </Typography>
+                    </Box>
+                    
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      p: 1.5, 
+                      borderRadius: 1.5, 
+                      bgcolor: "rgba(135,206,235,0.05)",
+                      border: "1px solid rgba(135,206,235,0.1)"
+                    }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Avatar 
+                          sx={{ 
+                            width: 24, 
+                            height: 24, 
+                            bgcolor: 'rgba(135,206,235,0.2)',
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          A
+                        </Avatar>
+                        <Typography variant="body2" sx={{ color: "#87CEEB" }}>AIR</Typography>
+                      </Stack>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: "#87CEEB" }}>
+                        {airBalance === null ? '0' : airBalance}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                )}
+              </Stack>
+              
+              {/* Eligibility check button */}
+              <Box sx={{ pt: 1 }}>
+                <Button 
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<Icon icon="mdi:check-circle" />}
+                  onClick={() => {
+                    const message: MessageType = {
+                      id: Date.now().toString(),
+                      text: "DeFAIza has located your wallet. You are now connected to the DeFAI Rewards ecosystem!",
+                      sender: "agent",
+                      timestamp: new Date(),
+                    };
+                    setMessages(prev => [...prev, message]);
+                  }}
+                  sx={{ 
+                    color: "#87CEEB",
+                    borderColor: "rgba(135,206,235,0.3)",
+                    py: 1,
+                    "&:hover": { 
+                      bgcolor: "rgba(135,206,235,0.1)",
+                      borderColor: "rgba(135,206,235,0.5)",
+                    }
+                  }}
+                >
+                  Check Eligibility
+                </Button>
+              </Box>
+            </Stack>
+          </Paper>
+        )}
 
         {/* Quick Topics */}
-        <Stack direction="row" spacing={1} sx={{ overflowX: "auto", py: 1, px: 2 }}>
-          {quickTopics.map((topic) => (
-            <Button
-              key={topic.id}
-              variant="outlined"
-              size="small"
-              onClick={() => handleQuickQuestion(topic.question)}
-              sx={{
-                color: "#87CEEB",
-                borderColor: "rgba(135,206,235,0.3)",
-                whiteSpace: "nowrap",
-                "&:hover": {
-                  borderColor: "rgba(135,206,235,0.6)",
-                  bgcolor: "rgba(135,206,235,0.1)",
-                },
-              }}
-            >
-              {topic.label}
-            </Button>
-          ))}
-        </Stack>
-        
-        {/* Chat container */}
-        <Paper 
+        <Paper
           elevation={0}
           sx={{
-            height: "70vh", 
-            bgcolor: "rgba(0,0,0,0.5)",
+            bgcolor: "rgba(0,0,0,0.4)",
             borderRadius: 2,
             border: "1px solid rgba(135,206,235,0.2)",
-            backdropFilter: "blur(10px)",
+            overflow: "hidden",
+            height: { xs: "60vh", sm: "70vh" }, // Adjust height on mobile
             display: "flex",
             flexDirection: "column",
-            overflow: "hidden",
           }}
         >
-          {/* Message area */}
-          <Box 
-            sx={{ 
-              p: 2, 
-              flexGrow: 1, 
-              overflow: "auto",
+          {/* Quick question topics - Scroll horizontally on mobile */}
+          <Box
+            sx={{
+              display: "flex",
+              p: 1.5,
+              gap: 1,
+              borderBottom: "1px solid rgba(135,206,235,0.2)",
+              bgcolor: "rgba(0,0,0,0.3)",
+              overflowX: "auto", // Allow horizontal scrolling on mobile
+              WebkitOverflowScrolling: "touch", // Better scrolling on iOS
+              "&::-webkit-scrollbar": {
+                height: "4px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "rgba(135,206,235,0.3)",
+                borderRadius: "4px",
+              },
+            }}
+          >
+            {quickTopics.map((topic) => (
+              <Chip
+                key={topic.id}
+                label={topic.label}
+                onClick={() => handleQuickQuestion(topic.question)}
+                sx={{
+                  color: "#87CEEB",
+                  borderColor: "rgba(135,206,235,0.3)",
+                  bgcolor: "rgba(135,206,235,0.05)",
+                  "&:hover": {
+                    bgcolor: "rgba(135,206,235,0.1)",
+                    borderColor: "rgba(135,206,235,0.5)",
+                  },
+                  whiteSpace: "nowrap", // Prevent wrapping on mobile
+                  flexShrink: 0, // Prevent chips from shrinking on mobile
+                }}
+              />
+            ))}
+          </Box>
+
+          {/* Messages container with improved mobile styling */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              p: { xs: 1.5, sm: 2 }, // Less padding on mobile
               overflowY: "auto",
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              maxHeight: "calc(70vh - 130px)",
             }}
           >
             {messages.map((message) => (
               <Box
                 key={message.id}
                 sx={{
-                  display: "flex",
-                  justifyContent: message.sender === "user" ? "flex-end" : "flex-start",
-                  mb: 2,
+                  alignSelf: message.sender === "user" ? "flex-end" : "flex-start",
+                  maxWidth: { xs: "85%", sm: "75%" }, // Wider messages on mobile
                 }}
               >
                 {message.sender === "agent" && (
@@ -451,7 +665,7 @@ function DashboardContent() {
                     }}
                     src="/defaiza.png"
                   >
-                    <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>AI</Typography>
+                    <Typography sx={{ fontSize: 12, fontWeight: "bold", color: "#87CEEB" }}>AI</Typography>
                   </Avatar>
                 )}
                 
@@ -494,7 +708,7 @@ function DashboardContent() {
                       border: "1px solid rgba(255,255,255,0.4)",
                     }}
                   >
-                    <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>YOU</Typography>
+                    <Typography sx={{ fontSize: 12, fontWeight: "bold", color: "#87CEEB" }}>YOU</Typography>
                   </Avatar>
                 )}
               </Box>
@@ -517,7 +731,7 @@ function DashboardContent() {
                   }}
                   src="/defaiza.png"
                 >
-                  <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>AI</Typography>
+                  <Typography sx={{ fontSize: 12, fontWeight: "bold", color: "#87CEEB" }}>AI</Typography>
                 </Avatar>
                 <Box
                   sx={{
@@ -544,10 +758,10 @@ function DashboardContent() {
             <div ref={messagesEndRef} />
           </Box>
           
-          {/* Input area */}
+          {/* Input area with improved mobile styles */}
           <Box 
             sx={{ 
-              p: 2, 
+              p: { xs: 1, sm: 2 }, // Less padding on mobile
               borderTop: "1px solid rgba(135,206,235,0.2)",
               bgcolor: "rgba(0,0,0,0.3)",
             }}
@@ -562,6 +776,7 @@ function DashboardContent() {
                 onKeyPress={handleKeyPress}
                 sx={{
                   "& .MuiOutlinedInput-root": {
+                    fontSize: { xs: "0.875rem", sm: "1rem" }, // Smaller font on mobile
                     color: "#fff",
                     borderRadius: 2,
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -584,7 +799,7 @@ function DashboardContent() {
                   border: "1px solid rgba(135,206,235,0.3)",
                   color: "#87CEEB",
                   borderRadius: 2,
-                  p: 1,
+                  p: { xs: 0.75, sm: 1 }, // Smaller padding on mobile
                   "&:hover": {
                     bgcolor: "rgba(135,206,235,0.2)",
                   },
