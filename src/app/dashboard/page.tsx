@@ -121,6 +121,7 @@ function DashboardContent() {
   const [defaiBalance, setDefaiBalance] = useState<string | null>(null);
   const [airBalance, setAirBalance] = useState<string | null>(null);
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+  const [showCopyTooltip, setShowCopyTooltip] = useState(false);
   
   // Get wallet context
   const { connection } = useConnection();
@@ -379,6 +380,21 @@ function DashboardContent() {
 
   const pathname = usePathname();
 
+  // Update the copyToClipboard function
+  const copyToClipboard = (text: string) => {
+    // Copy to clipboard
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        // Show tooltip
+        setShowCopyTooltip(true);
+        // Hide tooltip after 2 seconds
+        setTimeout(() => setShowCopyTooltip(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       {/* Header */}
@@ -461,16 +477,63 @@ function DashboardContent() {
                 borderRadius: 1.5, 
                 bgcolor: "rgba(0,0,0,0.3)", 
                 border: "1px solid rgba(135,206,235,0.15)",
-              }}>
+                cursor: "pointer",
+                position: "relative",
+                "&:hover": { bgcolor: "rgba(0,0,0,0.4)" }
+              }} 
+                onClick={() => publicKey && copyToClipboard(publicKey.toString())}
+              >
                 <Typography variant="caption" sx={{ opacity: 0.7 }}>
                   Wallet Address
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  sx={{ fontWeight: "bold", fontFamily: "var(--font-geist-mono)", color: "#87CEEB" }}
-                >
-                  {publicKey.toString().slice(0, 16)}...{publicKey.toString().slice(-8)}
-                </Typography>
+                
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      fontWeight: "bold", 
+                      fontFamily: "monospace", 
+                      color: "#87CEEB",
+                      flexGrow: 1
+                    }}
+                  >
+                    {publicKey?.toString()}
+                  </Typography>
+                  <Box sx={{ position: "relative" }}>
+                    <Icon icon="mdi:content-copy" style={{ color: "#87CEEB", fontSize: "1rem" }} />
+                    
+                    {/* Tooltip positioned next to the copy icon */}
+                    {showCopyTooltip && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          right: "-60px", // Position to the right of the icon
+                          transform: "translateY(-50%)",
+                          bgcolor: "rgba(0,0,0,0.8)",
+                          color: "#87CEEB",
+                          padding: "4px 12px",
+                          borderRadius: "4px",
+                          fontSize: "0.8rem",
+                          zIndex: 1500,
+                          whiteSpace: "nowrap",
+                          pointerEvents: "none",
+                          animation: "fadeIn 0.2s, fadeOut 0.2s 1.8s",
+                          "@keyframes fadeIn": {
+                            "0%": { opacity: 0, transform: "translateY(-50%) translateX(-10px)" },
+                            "100%": { opacity: 1, transform: "translateY(-50%) translateX(0)" }
+                          },
+                          "@keyframes fadeOut": {
+                            "0%": { opacity: 1, transform: "translateY(-50%) translateX(0)" },
+                            "100%": { opacity: 0, transform: "translateY(-50%) translateX(10px)" }
+                          }
+                        }}
+                      >
+                        Copied!
+                      </Box>
+                    )}
+                  </Box>
+                </Stack>
               </Box>
               
               {/* Token balances */}

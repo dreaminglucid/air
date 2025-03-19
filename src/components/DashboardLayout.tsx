@@ -17,7 +17,8 @@ import {
   useMediaQuery,
   useTheme,
   Divider,
-  Fab
+  Fab,
+  Chip
 } from '@mui/material';
 import { Icon } from "@iconify/react";
 import Link from 'next/link';
@@ -70,6 +71,49 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: 'mdi:chart-bar', 
       path: '/dashboard/analytics',
       active: pathname === '/dashboard/analytics'
+    },
+    { 
+      text: 'Portfolio', 
+      icon: 'mdi:chart-donut', 
+      path: '/dashboard/portfolio',
+      active: pathname === '/dashboard/portfolio'
+    },
+    { 
+      text: 'Yield Optimizer', 
+      icon: 'mdi:auto-fix', 
+      path: '/dashboard/optimizer',
+      active: pathname === '/dashboard/optimizer'
+    },
+    { 
+      text: 'Asset Bridge', 
+      icon: 'mdi:bridge', 
+      path: '/dashboard/bridge',
+      active: pathname === '/dashboard/bridge'
+    },
+    { 
+      text: 'AI Insights', 
+      icon: 'mdi:robot', 
+      path: '/dashboard/insights',
+      active: pathname === '/dashboard/insights'
+    },
+    { 
+      text: 'Community', 
+      icon: 'mdi:account-group', 
+      path: '/dashboard/community',
+      active: pathname === '/dashboard/community'
+    },
+    { 
+      text: 'DeFAI Academy', 
+      icon: 'mdi:school', 
+      path: '/dashboard/academy',
+      active: pathname === '/dashboard/academy'
+    },
+    { 
+      text: 'Notifications', 
+      icon: 'mdi:bell-outline', 
+      path: '/dashboard/notifications',
+      active: pathname === '/dashboard/notifications',
+      badge: 3
     }
   ];
 
@@ -83,7 +127,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           DeFAI Menu
         </Typography>
       </Toolbar>
-      <List>
+      <List sx={{ overflowY: 'auto' }}>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton 
@@ -109,6 +153,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   color: item.active ? '#87CEEB' : 'rgba(135,206,235,0.7)'
                 }}
               />
+              {item.badge && (
+                <Chip
+                  size="small"
+                  label={item.badge}
+                  sx={{
+                    bgcolor: 'rgba(135,206,235,0.2)',
+                    color: '#87CEEB',
+                    fontWeight: 'bold',
+                    height: 20,
+                    minWidth: 20,
+                    ml: 1
+                  }}
+                />
+              )}
             </ListItemButton>
           </ListItem>
         ))}
