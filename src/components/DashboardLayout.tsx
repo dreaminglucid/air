@@ -79,10 +79,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       active: pathname === '/dashboard/portfolio'
     },
     { 
-      text: 'Yield Optimizer', 
-      icon: 'mdi:auto-fix', 
-      path: '/dashboard/optimizer',
-      active: pathname === '/dashboard/optimizer'
+      text: 'Yield', 
+      icon: 'mdi:chart-areaspline', 
+      path: '/dashboard/yield',
+      active: pathname === '/dashboard/yield'
     },
     { 
       text: 'Asset Bridge', 
