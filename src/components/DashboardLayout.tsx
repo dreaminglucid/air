@@ -18,11 +18,21 @@ import {
   useTheme,
   Divider,
   Fab,
-  Chip
+  Chip,
+  Badge,
+  Button
 } from '@mui/material';
 import { Icon } from "@iconify/react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import NotificationsModal from '@/components/NotificationsModal';
+import dynamic from 'next/dynamic';
+
+// Dynamically import WalletMultiButton to prevent SSR issues
+const WalletMultiButton = dynamic(
+  async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
+  { ssr: false }
+);
 
 const drawerWidth = 240;
 
@@ -30,41 +40,75 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+// Define the menu item interface
+interface MenuItem {
+  text: string;
+  icon: string;
+  path?: string;
+  action?: () => void;
+  active: boolean;
+  badge?: number;
+}
+
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
   const pathname = usePathname();
 
-  // Force drawer to open when component mounts on non-mobile
-  useEffect(() => {
-    if (!isMobile) {
-      setMobileOpen(true);
-    }
-  }, [isMobile]);
-
+  // Handle drawer toggle
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const menuItems = [
+  // Load notification count
+  useEffect(() => {
+    // This would typically be an API call to get unread notifications count
+    // For now, we'll simulate it
+    const fetchNotificationCount = async () => {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Random number between 0 and 5 for demo purposes
+      setNotificationCount(Math.floor(Math.random() * 6));
+    };
+    
+    fetchNotificationCount();
+  }, []);
+
+  // Close mobile drawer when route changes
+  useEffect(() => {
+    if (!isMobile) {
+      setMobileOpen(false);
+    }
+  }, [pathname, isMobile]);
+
+  // Menu items
+  const menuItems: MenuItem[] = [
     { 
-      text: 'Dashboard',
-      icon: 'mdi:view-dashboard',
+      text: 'Dashboard', 
+      icon: 'mdi:view-dashboard', 
       path: '/dashboard',
       active: pathname === '/dashboard'
     },
     { 
-      text: 'Claim Airdrop', 
-      icon: 'mdi:gift-outline', 
-      path: '/dashboard/claim',
-      active: pathname === '/dashboard/claim'
+      text: 'Portfolio', 
+      icon: 'mdi:chart-pie', 
+      path: '/dashboard/portfolio',
+      active: pathname === '/dashboard/portfolio'
     },
     { 
-      text: 'Vote & Governance', 
-      icon: 'mdi:vote-outline', 
-      path: '/dashboard/vote',
-      active: pathname === '/dashboard/vote'
+      text: 'Yield Optimizer', 
+      icon: 'mdi:chart-line', 
+      path: '/dashboard/yield',
+      active: pathname === '/dashboard/yield'
+    },
+    { 
+      text: 'Claim Rewards', 
+      icon: 'mdi:gift', 
+      path: '/dashboard/claim',
+      active: pathname === '/dashboard/claim'
     },
     { 
       text: 'Analytics', 
@@ -73,19 +117,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       active: pathname === '/dashboard/analytics'
     },
     { 
-      text: 'Portfolio', 
-      icon: 'mdi:chart-donut', 
-      path: '/dashboard/portfolio',
-      active: pathname === '/dashboard/portfolio'
-    },
-    { 
-      text: 'Yield', 
-      icon: 'mdi:chart-areaspline', 
-      path: '/dashboard/yield',
-      active: pathname === '/dashboard/yield'
-    },
-    { 
-      text: 'Asset Bridge', 
+      text: 'Bridge', 
       icon: 'mdi:bridge', 
       path: '/dashboard/bridge',
       active: pathname === '/dashboard/bridge'
@@ -111,9 +143,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { 
       text: 'Notifications', 
       icon: 'mdi:bell-outline', 
-      path: '/dashboard/notifications',
-      active: pathname === '/dashboard/notifications',
-      badge: 3
+      action: () => setNotificationsOpen(true),
+      active: false,
+      badge: notificationCount > 0 ? notificationCount : undefined
     }
   ];
 
@@ -131,42 +163,35 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton 
-              component={Link} 
+              component={item.path ? Link : 'button'}
               href={item.path}
+              onClick={item.action}
               sx={{ 
                 bgcolor: item.active ? 'rgba(135,206,235,0.1)' : 'transparent',
                 '&:hover': {
                   bgcolor: 'rgba(135,206,235,0.2)'
                 },
-                borderLeft: item.active ? '3px solid #87CEEB' : '3px solid transparent'
+                
               }}
             >
-              <ListItemIcon sx={{ 
-                color: item.active ? '#87CEEB' : 'rgba(135,206,235,0.7)',
-                minWidth: '48px' 
-              }}>
-                <Icon icon={item.icon} width={24} height={24} />
+              <ListItemIcon sx={{ color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)' }}>
+                {item.badge ? (
+                  <Badge badgeContent={item.badge} color="error">
+                    <Icon icon={item.icon} width={24} height={24} />
+                  </Badge>
+                ) : (
+                  <Icon icon={item.icon} width={24} height={24} />
+                )}
               </ListItemIcon>
               <ListItemText 
                 primary={item.text} 
                 sx={{ 
-                  color: item.active ? '#87CEEB' : 'rgba(135,206,235,0.7)'
+                  color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)',
+                  '& .MuiListItemText-primary': {
+                    fontWeight: item.active ? 'bold' : 'normal'
+                  }
                 }}
               />
-              {item.badge && (
-                <Chip
-                  size="small"
-                  label={item.badge}
-                  sx={{
-                    bgcolor: 'rgba(135,206,235,0.2)',
-                    color: '#87CEEB',
-                    fontWeight: 'bold',
-                    height: 20,
-                    minWidth: 20,
-                    ml: 1
-                  }}
-                />
-              )}
             </ListItemButton>
           </ListItem>
         ))}
@@ -174,7 +199,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       
       <Divider sx={{ my: 2, borderColor: 'rgba(135,206,235,0.2)' }} />
       
-      {/* Back to Home button at bottom */}
       <List>
         <ListItem disablePadding>
           <ListItemButton 
@@ -215,7 +239,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }}>
       <CssBaseline />
       
-      {/* AppBar */}
       <AppBar 
         position="fixed"
         sx={{ 
@@ -242,15 +265,27 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <Typography variant="h6" noWrap component="div" sx={{ color: "#87CEEB" }}>
             DeFAI Dashboard
           </Typography>
+          
+          <IconButton 
+            color="inherit" 
+            onClick={() => setNotificationsOpen(true)}
+            sx={{ mr: 1 }}
+          >
+            <Badge badgeContent={notificationCount} color="error">
+              <Icon icon="mdi:bell-outline" width={24} height={24} color="#87CEEB" />
+            </Badge>
+          </IconButton>
+          
+          <Box sx={{ display: 'inline-block' }}>
+            <WalletMultiButton />
+          </Box>
         </Toolbar>
       </AppBar>
       
-      {/* Drawer container */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
       >
-        {/* Mobile drawer - temporary */}
         {isMobile ? (
           <Drawer
             variant="temporary"
@@ -271,7 +306,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             {drawer}
           </Drawer>
         ) : (
-          /* For desktop - always visible */
           <Drawer
             variant="permanent"
             open
@@ -293,7 +327,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         )}
       </Box>
       
-      {/* Main content */}
       <Box
         component="main"
         sx={{ 
@@ -311,7 +344,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {children}
       </Box>
       
-      {/* Floating action button - only on mobile */}
       <Fab
         color="primary"
         aria-label="open menu"
@@ -332,6 +364,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         <Icon icon={mobileOpen ? "mdi:close" : "mdi:menu"} width={24} height={24} />
       </Fab>
+      
+      <NotificationsModal 
+        open={notificationsOpen} 
+        onClose={() => setNotificationsOpen(false)} 
+      />
     </Box>
   );
 } 
