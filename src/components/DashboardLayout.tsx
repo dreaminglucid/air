@@ -228,6 +228,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     </>
   );
 
+  // Update the notificationCount state when notifications change
+  const handleNotificationsUpdate = (unreadCount: number) => {
+    setNotificationCount(unreadCount);
+  };
+
   return (
     <Box sx={{ 
       display: 'flex', 
@@ -367,7 +372,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       
       <NotificationsModal 
         open={notificationsOpen} 
-        onClose={() => setNotificationsOpen(false)} 
+        onClose={() => setNotificationsOpen(false)}
+        onNotificationsUpdate={handleNotificationsUpdate}
       />
     </Box>
   );

@@ -42,9 +42,10 @@ interface Notification {
 interface NotificationsModalProps {
   open: boolean;
   onClose: () => void;
+  onNotificationsUpdate?: (unreadCount: number) => void;
 }
 
-export default function NotificationsModal({ open, onClose }: NotificationsModalProps) {
+export default function NotificationsModal({ open, onClose, onNotificationsUpdate }: NotificationsModalProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,14 @@ export default function NotificationsModal({ open, onClose }: NotificationsModal
       prevNotifications.map(notification => ({ ...notification, read: true }))
     );
   };
+
+  // Update parent component with unread count whenever notifications change
+  useEffect(() => {
+    const unreadCount = notifications.filter(notification => !notification.read).length;
+    if (onNotificationsUpdate) {
+      onNotificationsUpdate(unreadCount);
+    }
+  }, [notifications, onNotificationsUpdate]);
 
   // Load notifications (simulated)
   useEffect(() => {
@@ -162,8 +171,14 @@ export default function NotificationsModal({ open, onClose }: NotificationsModal
       
       setNotifications(mockNotifications);
       setLoading(false);
+      
+      // Update unread count on initial load
+      const unreadCount = mockNotifications.filter(notification => !notification.read).length;
+      if (onNotificationsUpdate) {
+        onNotificationsUpdate(unreadCount);
+      }
     }, 1000);
-  }, []);
+  }, [onNotificationsUpdate]);
 
   // Filter notifications based on active tab
   const filteredNotifications = useMemo(() => {
