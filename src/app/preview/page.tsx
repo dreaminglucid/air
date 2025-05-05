@@ -1,6 +1,7 @@
 "use client";
-import { Container, Typography, Box, Paper, Grid, Card, CardContent, Button, Stack } from '@mui/material';
+import { Container, Typography, Box, Paper, Grid, Card, CardContent, Button, Stack, IconButton } from '@mui/material';
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 // Helper component for highlighted sections
 const HighlightedSection = ({ title, description, children }: { title: string, description: string, children: React.ReactNode }) => {
@@ -17,6 +18,9 @@ const HighlightedSection = ({ title, description, children }: { title: string, d
         borderRadius: 2,
         position: 'relative',
         overflow: 'hidden',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         '&::before': { // Subtle glow effect
           content: '""',
           position: 'absolute',
@@ -35,7 +39,7 @@ const HighlightedSection = ({ title, description, children }: { title: string, d
     >
       <Typography variant="h5" gutterBottom sx={{ color: '#87CEEB', fontWeight: 'bold', mb: 1 }}>{title}</Typography>
       <Typography variant="body1" sx={{ mb: 3, color: '#FFFFFF' }}>{description}</Typography>
-      <Box sx={{ position: 'relative', zIndex: 1 }}> {/* Ensure content is above glow */}
+      <Box sx={{ position: 'relative', zIndex: 1, flexGrow: 1 }}> {/* Allow content box to grow */}
         {children}
       </Box>
     </Paper>
@@ -56,6 +60,15 @@ export default function PreviewPage() {
         background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)", // Match homepage background
       }}
     >
+      {/* Back Button */}
+      <Box sx={{ mb: 2 }}> {/* Add some margin below the button */}
+        <Link href="/" passHref>
+          <IconButton sx={{ color: hackerGreen }} aria-label="Go back to homepage">
+            <Icon icon="mdi:arrow-left" />
+          </IconButton>
+        </Link>
+      </Box>
+
       <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 6, textShadow: "0 0 20px rgba(135,206,235,0.6)" }}>
         Dashboard Preview
       </Typography>
@@ -133,17 +146,39 @@ export default function PreviewPage() {
         <Grid item xs={12} md={6}>
           <HighlightedSection 
             title="Analytics & Insights"
-            description="Visualize key metrics like your portfolio performance, overall protocol health, reward distribution history, and market trends."
+            description="Visualize key metrics like your portfolio performance."
           >
             {/* Placeholder for Analytics Component */}
              <Card sx={{ backgroundColor: 'rgba(0,0,0,0.3)', border: '1px solid rgba(135, 206, 235, 0.2)', textAlign: 'center', p: 3 }}>
               <Icon icon="mdi:chart-areaspline" width="80" color={hackerGreen} style={{ marginBottom: '16px' }} />
               <Typography variant="h6" sx={{ color: orangeNeon }}>Performance Chart</Typography>
-              <Typography variant="body2" sx={{ color: orangeNeon, opacity: 0.7 }}>[Chart Mockup Area]</Typography>
-               <Button variant="text" sx={{ color: hackerGreen, mt: 2 }}>View Detailed Report</Button>
+              {/* Improved Chart Mockup Area */}
+              <Box sx={{ height: 100, border: '1px dashed grey', borderRadius: 1, p: 1, mt: 1, mb: 2, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', overflow: 'hidden' }}>
+                <Box sx={{ width: '15%', height: '60%', bgcolor: 'rgba(135, 206, 235, 0.3)' }} />
+                <Box sx={{ width: '15%', height: '80%', bgcolor: 'rgba(135, 206, 235, 0.5)' }} />
+                <Box sx={{ width: '15%', height: '40%', bgcolor: 'rgba(135, 206, 235, 0.2)' }} />
+                <Box sx={{ width: '15%', height: '70%', bgcolor: 'rgba(135, 206, 235, 0.4)' }} />
+              </Box>
+              {/* <Typography variant="body2" sx={{ color: orangeNeon, opacity: 0.7 }}>[Chart Mockup Area]</Typography> */}
              </Card>
           </HighlightedSection>
         </Grid>
+
+        {/* 5. Agentic RWA Creation & Inheritance Preview */}
+        <Grid item xs={12} md={12}>
+          <HighlightedSection 
+            title="Agentic RWA Creation & Inheritance"
+            description="Leverage DeFAIza to autonomously create and manage Real World Assets (RWAs) represented on-chain. Set up inheritance protocols for seamless asset transfer."
+          >
+            {/* Placeholder for RWA Component */}
+             <Card sx={{ backgroundColor: 'rgba(0,0,0,0.3)', border: '1px solid rgba(135, 206, 235, 0.2)', textAlign: 'center', p: 3 }}>
+              <Icon icon="mdi:cube-send" width="80" color={hackerGreen} style={{ marginBottom: '16px' }} />
+              <Typography variant="h6" sx={{ color: orangeNeon }}>Manage Your Digital Assets</Typography>
+              <Typography variant="body2" sx={{ color: orangeNeon, opacity: 0.7, my: 2 }}>Create, manage, and transfer tokenized RWAs with agentic assistance.</Typography>
+             </Card>
+          </HighlightedSection>
+        </Grid>
+
       </Grid>
     </Container>
   );
