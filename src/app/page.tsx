@@ -217,6 +217,10 @@ export default function Home() {
           <Button
             variant="outlined"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
+            component="a"
+            href="https://dexscreener.com/solana/3jiwexdwzxjva2yd8aherfsrn7a97qbwmdz8i4q6mh7y"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <IconWithFallback icon="mdi:chart-box" width={30} color={hackerGreen} />
             &nbsp;Chart
@@ -224,16 +228,7 @@ export default function Home() {
           <Button
             variant="outlined"
             component="a"
-            href="/dashboard"
-            sx={{ color: orangeNeon, borderColor: orangeNeon }}
-          >
-            <IconWithFallback icon="mdi:view-dashboard" width={30} color={orangeNeon} />
-            &nbsp;Dashboard
-          </Button>
-          <Button
-            variant="outlined"
-            component="a"
-            href="https://x.com/elizadotfinance"
+            href="https://x.com/defairewards"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter profile"
@@ -244,7 +239,7 @@ export default function Home() {
           <Button
             variant="outlined"
             component="a"
-            href="https://t.me/elizadotfinance"
+            href="https://t.me/DeFAI_Portal"
             target="_blank"
             rel="noopener noreferrer"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
@@ -276,7 +271,7 @@ export default function Home() {
         <Stack
           direction={{ xs: "column", md: "row" }}
           spacing={4}
-          sx={{ mt: 8, width: "100%", animation: `${wave} 8s infinite ease-in-out`, "&:hover": { animation: "none" } }}
+          sx={{ mt: 8, width: "100%", "&:hover": { animation: "none" } }}
         >
           <Stack direction="column" spacing={2}>
             {/* How It Works */}
@@ -290,10 +285,6 @@ export default function Home() {
                 cursor: "pointer",
                 backdropFilter: "blur(5px)",
                 WebkitBackdropFilter: "blur(5px)",
-                animation: `${wave} 8s infinite ease-in-out`,
-                "&:hover": {
-                  background: "rgba(135,206,235,0.1)",
-                },
               }}
               spacing={2}
             >
@@ -330,10 +321,6 @@ export default function Home() {
                 cursor: "pointer",
                 backdropFilter: "blur(5px)",
                 WebkitBackdropFilter: "blur(5px)",
-                animation: `${wave} 8s infinite ease-in-out`,
-                "&:hover": {
-                  background: "rgba(135,206,235,0.1)",
-                },
               }}
               spacing={2}
             >
@@ -371,10 +358,6 @@ export default function Home() {
               cursor: "pointer",
               backdropFilter: "blur(5px)",
               WebkitBackdropFilter: "blur(5px)",
-              animation: `${wave} 8s infinite ease-in-out`,
-              "&:hover": {
-                background: "rgba(135,206,235,0.1)",
-              },
             }}
             spacing={2}
           >
@@ -808,10 +791,6 @@ export default function Home() {
             width: { xs: "100%", md: "60%" },
             p: 3,
             boxSizing: "border-box",
-            animation: `${wave} 8s infinite ease-in-out`,
-            "&:hover": {
-              animation: "none",
-            },
           }}
           spacing={2}
         >
@@ -846,11 +825,6 @@ export default function Home() {
             p: 3,
             mt: 4,
             boxSizing: "border-box",
-            animation: `${wave} 8s infinite ease-in-out`,
-            "&:hover": {
-              animation: "none",
-              background: "rgba(135,206,235,0.1)",
-            },
           }}
           spacing={2}
         >
@@ -948,13 +922,13 @@ export default function Home() {
               borderRadius: 2
             }}>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                <strong>Token Name:</strong> DeFAI
+                <strong>Token Name:</strong> defAIRewards
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
                 <strong>Ticker:</strong> AIR
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                <strong>Total Supply:</strong> 1,000,000,000
+                <strong>Total Supply:</strong> 100,000,000,000
               </Typography>
             </Box>
           </Stack>
@@ -966,7 +940,6 @@ export default function Home() {
               p: 3,
               background: "rgba(135,206,235,0.03)",
               border: "1px solid rgba(135,206,235,0.1)",
-              animation: `${wave} 12s infinite ease-in-out`,
             }}
             spacing={2}
           >
@@ -995,8 +968,6 @@ export default function Home() {
               p: 3,
               background: "rgba(135,206,235,0.03)",
               border: "1px solid rgba(135,206,235,0.1)",
-              animation: `${wave} 10s infinite ease-in-out`,
-              animationDelay: "0.5s",
             }}
             spacing={2}
           >
@@ -1044,8 +1015,6 @@ export default function Home() {
                 p: 3,
                 background: "rgba(135,206,235,0.03)",
                 border: "1px solid rgba(135,206,235,0.1)",
-                animation: `${wave} 11s infinite ease-in-out`,
-                animationDelay: "1s",
               }}
               spacing={2}
             >
@@ -1094,8 +1063,6 @@ export default function Home() {
                 p: 3,
                 background: "rgba(135,206,235,0.03)",
                 border: "1px solid rgba(135,206,235,0.1)",
-                animation: `${wave} 9s infinite ease-in-out`,
-                animationDelay: "1.5s",
               }}
               spacing={2}
             >
@@ -1132,7 +1099,6 @@ export default function Home() {
               p: 3,
               background: "rgba(135,206,235,0.03)",
               border: "1px solid rgba(135,206,235,0.1)",
-              animation: `${float} 15s infinite ease-in-out`,
             }}
             spacing={2}
           >
@@ -1143,7 +1109,7 @@ export default function Home() {
                 fontWeight: "bold" 
               }}
             >
-              {"// Roadmap 2024"}
+              {"// Roadmap 2025"}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, width: '100%' }}>
               {/* Q1 */}
@@ -1155,7 +1121,7 @@ export default function Home() {
                 background: 'rgba(135,206,235,0.02)'
               }}>
                 <Typography variant="h6" sx={{ color: hackerGreen, mb: 1 }}>Q1</Typography>
-                <Typography variant="body2">Protocol launch, initial liquidity pool setup, and community onboarding</Typography>
+                <Typography variant="body2">Protocol token launch, initial liquidity pool setup, and community onboarding</Typography>
               </Box>
               {/* Q2 */}
               <Box sx={{ 
@@ -1233,7 +1199,6 @@ export default function Home() {
               background: "rgba(135,206,235,0.05)",
               border: "1px solid rgba(135,206,235,0.2)",
               textAlign: "center",
-              animation: `${float} 8s infinite ease-in-out`,
             }}
             spacing={2}
             alignItems="center"
@@ -1280,7 +1245,6 @@ export default function Home() {
             p: 3,
             mt: 6,
             boxSizing: "border-box",
-            animation: `${float} 8s infinite ease-in-out`,
           }}
           spacing={2}
         >
@@ -1330,7 +1294,7 @@ export default function Home() {
           </Box>
           
           <Typography sx={{ textAlign: "center" }}>
-            A snapshot of $DeFAI holders will be taken on March 31, 2025, enabling the 1:1 claim 
+            The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim 
             of $AIR tokens via Streamflow. No action is required before the snapshot date.
           </Typography>
           
@@ -1347,13 +1311,13 @@ export default function Home() {
                 {`// Snapshot Details`}
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} 1:1 claim ratio (1 $DeFAI = 1 $AIR)
+                {`>`} 1:10 claim ratio (1 $DeFAI = 10 $AIR)
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
                 {`>`} Streamflow distribution ensures fair and verifiable allocation
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} Claim window opens April 1, 2025 (00:00 UTC)
+                {`>`} Claim window opens July 4, 2025 (00:00 UTC)
               </Typography>
               <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
                 {`>`} Unclaimed tokens return to community treasury after 7 days
