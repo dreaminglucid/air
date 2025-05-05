@@ -13,6 +13,12 @@ import {
 import { useState, useEffect } from "react";
 import { keyframes } from '@mui/system';
 
+// Define marquee keyframes
+const marquee = keyframes`
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); } // Translate by half (since content is doubled)
+`;
+
 // Add these animations before the Home component
 const float = keyframes`
   0% { transform: translateY(0px) translateX(0px); }
@@ -306,11 +312,12 @@ export default function Home() {
             position: "absolute",
             left: slide.left,
             top: slide.top,
-            width: slide.size,
-            height: 'auto', // Maintain aspect ratio
-            transform: `rotate(${slide.rotation}deg) translate(-50%, -50%)`, // Center image on position and rotate
-            opacity: 0.1, // Increase opacity
-            zIndex: 0, // Ensure they are behind content
+            width: '100vw',
+            height: '100vh',
+            objectFit: 'cover',
+            transform: `rotate(${slide.rotation}deg) translate(-50%, -50%)`,
+            opacity: 0,
+            zIndex: -1,
             pointerEvents: "none",
             animation: `${float} ${slide.duration}s infinite ease-in-out`,
             animationDelay: `${slide.delay}s`,
@@ -362,7 +369,7 @@ export default function Home() {
         <Typography
           variant="h1"
           sx={{
-            fontSize: 60,
+            fontSize: { xs: 40, sm: 50, md: 60 },
             fontWeight: "bold",
             textShadow: "0 0 20px rgba(135,206,235,0.6)",
           }}
@@ -410,6 +417,16 @@ export default function Home() {
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
           >
             <IconWithFallback icon="mdi:telegram" width={30} color={hackerGreen} />
+          </Button>
+          {/* Add Preview Button */}
+          <Button
+            variant="outlined"
+            component="a"
+            href="/preview" // Link to the preview page
+            sx={{ color: orangeNeon, borderColor: orangeNeon }} // Style like Twitter button
+          >
+            <IconWithFallback icon="mdi:eye-outline" width={30} color={orangeNeon} />
+            &nbsp;Preview
           </Button>
         </Stack>
 
@@ -794,68 +811,104 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        {/* Partners Section */}
+        {/* Partners Section - Marquee */}
         <Stack
-          spacing={4}
+          spacing={2} // Reduced spacing for title and marquee
           alignItems="center"
-          sx={{ width: "100%", mt: 8 }}
+          sx={{ width: "100%", mt: 8, mb: 4 }} // Added margin-bottom
         >
           <Typography
-            variant="h2"
+            variant="h4" // Slightly smaller heading
             sx={{
-              fontSize: 48,
+              fontSize: { xs: 32, md: 40 }, // Responsive size
               fontWeight: "bold",
-              textShadow: "0 0 20px rgba(135,206,235,0.6)",
+              textShadow: "0 0 15px rgba(135,206,235,0.5)",
+              mb: 3, // Margin below title
             }}
           >
             Our Partners
           </Typography>
-          <Stack 
-            direction="row" 
-            spacing={{ xs: 2, md: 4 }} // Adjust spacing as needed
-            justifyContent="center" 
-            alignItems="center"
-            sx={{ flexWrap: 'wrap' }} // Allow wrapping on smaller screens
+          {/* Marquee Container */}
+          <Box
+            sx={{
+              overflow: 'hidden',
+              width: '90%', // Limit width slightly
+              maxWidth: '1000px', // Max width
+              mx: 'auto',
+              position: 'relative',
+              // Optional: Add fading edges
+              '&::before, &::after': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                width: '50px',
+                zIndex: 2,
+              },
+              '&::before': {
+                left: 0,
+                background: 'linear-gradient(to right, #0d0d1a 0%, transparent 100%)', // Match background start color
+              },
+              '&::after': {
+                right: 0,
+                background: 'linear-gradient(to left, #1a1a2e 0%, transparent 100%)', // Match background end color
+              },
+            }}
           >
-             <Box 
-              component="img"
-              src="/animoca.png"
-              alt="Animoca Brands Logo"
-              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-             <Box 
-              component="img"
-              src="/systems.png"
-              alt="ElizaSystems Logo"
-              sx={{ height: { xs: 40, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-             <Box 
-              component="img"
-              src="/transform.png"
-              alt="Transform Logo"
-              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-           
-           
-            <Box 
-              component="img"
-              src="/dnafund.png"
-              alt="DNA Fund Logo"
-              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-            <Box 
-              component="img"
-              src="/omega.png"
-              alt="Omega Logo"
-              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-             <Box 
-              component="img"
-              src="/elizaos.png"
-              alt="Elizaos Logo"
-              sx={{ height: { xs: 40, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
-            />
-          </Stack>
+            {/* Animated Inner Container */}
+            <Box
+              sx={{
+                display: 'flex',
+                width: 'fit-content', // Adjust width to content
+                animation: `${marquee} 30s linear infinite`, // Apply animation (adjust duration as needed)
+                '&:hover': {
+                  animationPlayState: 'paused',
+                },
+              }}
+            >
+              {/* Render Logos Twice for Seamless Loop */}
+              {[...Array(2)].map((_, i) => (
+                <Stack direction="row" spacing={6} key={i} alignItems="center" sx={{ px: 3}}> {/* Add spacing between logos */}
+                  <Box
+                    component="img"
+                    src="/animoca.png"
+                    alt="Animoca Brands Logo"
+                    sx={{ height: { xs: 25, md: 40 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                  <Box
+                    component="img"
+                    src="/systems.png"
+                    alt="ElizaSystems Logo"
+                    sx={{ height: { xs: 15, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                  <Box
+                    component="img"
+                    src="/transform.png"
+                    alt="Transform Logo"
+                    sx={{ height: { xs: 25, md: 40 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                  <Box
+                    component="img"
+                    src="/dnafund.png"
+                    alt="DNA Fund Logo"
+                    sx={{ height: { xs: 25, md: 40 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                  <Box
+                    component="img"
+                    src="/omega.png"
+                    alt="Omega Logo"
+                    sx={{ height: { xs: 25, md: 40 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                  <Box
+                    component="img"
+                    src="/elizaos.png"
+                    alt="Elizaos Logo"
+                    sx={{ height: { xs: 15, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                  />
+                </Stack>
+              ))}
+            </Box>
+          </Box>
         </Stack>
 
         {/* $AIR Tokenomics Section */}
