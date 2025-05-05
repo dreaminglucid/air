@@ -64,6 +64,115 @@ const IconWithFallback = ({ icon, width, color }: { icon: string, width: number,
   );
 };
 
+// Define props interface for the new component
+interface SnapshotInfoCardProps {
+  title: string;
+  progressValue: number;
+  progressLabelPosition: string;
+  progressLabelText: string;
+  description: string;
+  details: string[]; // Array of strings for the bullet points
+}
+
+// Define the reusable component
+const SnapshotInfoCard = ({
+  title,
+  progressValue,
+  progressLabelPosition,
+  progressLabelText,
+  description,
+  details,
+}: SnapshotInfoCardProps) => {
+  const hackerGreen = "#87CEEB"; // Assuming hackerGreen is accessible or pass as prop
+
+  return (
+    <Stack
+      sx={{
+        flex: 1, // Make stacks share space
+        borderRadius: 2,
+        background: "rgba(135,206,235,0.05)",
+        backdropFilter: "blur(5px)",
+        WebkitBackdropFilter: "blur(5px)",
+        border: "1px solid rgba(135,206,235,0.2)",
+        cursor: "pointer",
+        p: 3,
+        boxSizing: "border-box",
+        height: '100%' // Try to make height consistent
+      }}
+      spacing={2}
+    >
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "bold",
+          mb: 2,
+          textShadow: "0 0 20px rgba(135,206,235,0.6)",
+        }}
+      >
+        {title}
+      </Typography>
+
+      <Box sx={{ position: "relative" }}>
+        <LinearProgress
+          variant="determinate"
+          value={progressValue}
+          sx={{
+            height: 8,
+            borderRadius: 5,
+            backgroundColor: 'rgba(135,206,235,0.1)',
+            '& .MuiLinearProgress-bar': {
+              backgroundColor: hackerGreen,
+              borderRadius: 5,
+            },
+            mb: 3,
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            left: progressLabelPosition,
+            top: "-25px",
+            transform: "translateX(-50%)",
+            background: 'rgba(0,0,0,0.5)',
+            px: 1.5,
+            py: 0.5,
+            borderRadius: 1,
+            border: `1px dashed ${hackerGreen}`,
+          }}
+        >
+          <Typography variant="caption" sx={{ fontFamily: "monospace" }}>
+            {progressLabelText}
+          </Typography>
+        </Box>
+      </Box>
+
+      <Typography sx={{ textAlign: "center" }}>
+        {description}
+      </Typography>
+
+      <Box
+        sx={{
+          p: 2,
+          background: "rgba(135,206,235,0.03)",
+          borderRadius: 1,
+          border: "1px dashed rgba(135,206,235,0.2)",
+        }}
+      >
+        <Stack spacing={1}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#FFFFFF" }}>
+            {`// Snapshot Details`}
+          </Typography>
+          {details.map((detail, index) => (
+             <Typography key={index} variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
+               {`> ${detail}`}
+             </Typography>
+          ))}
+        </Stack>
+      </Box>
+    </Stack>
+  );
+};
+
 export default function Home() {
   const [volume, setVolume] = useState(100000);
   const [holdings, setHoldings] = useState(1000000);
@@ -173,20 +282,35 @@ export default function Home() {
           zIndex: 1,
         }}
       >
-        {/* Token badge */}
-        <Typography
-          variant="button"
-          sx={{
-            color: hackerGreen,
-            border: `2px solid ${hackerGreen}`,
-            padding: "8px 24px",
-            borderRadius: "24px",
-            background: "rgba(135,206,235,0.1)",
-            animation: `${float} 6s infinite ease-in-out`,
-          }}
-        >
-          AIR
-        </Typography>
+        {/* Token badges - side by side */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography
+            variant="button"
+            sx={{
+              color: hackerGreen,
+              border: `2px solid ${hackerGreen}`,
+              padding: "8px 24px",
+              borderRadius: "24px",
+              background: "rgba(135,206,235,0.1)",
+              animation: `${float} 6s infinite ease-in-out`,
+            }}
+          >
+            DEFAI
+          </Typography>
+          <Typography
+            variant="button"
+            sx={{
+              color: hackerGreen,
+              border: `2px solid ${hackerGreen}`,
+              padding: "8px 24px",
+              borderRadius: "24px",
+              background: "rgba(135,206,235,0.1)",
+              animation: `${float} 6s infinite ease-in-out`,
+            }}
+          >
+            AIR
+          </Typography>
+        </Stack>
 
         {/* Main title */}
         <Typography
@@ -198,22 +322,17 @@ export default function Home() {
           }}
         >
           
-          DEFAI REWARDS
+          DEFAIREWARDS
         </Typography>
 
         {/* Subtitle */}
         <Typography variant="h5" sx={{ mb: 4 }}>
-         Get back hours of your time harvesting rewards with DeFAIza!
+        First Agent Bank of DeFAI Optimizing Yield Agenticly Across Generations
         </Typography>
 
         {/* Buttons row */}
         <Stack direction="row" spacing={2}>
-          <Button
-            variant="outlined"
-            sx={{ color: orangeNeon, borderColor: orangeNeon }}
-          >
-            Buy Now
-          </Button>
+         
           <Button
             variant="outlined"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
@@ -259,12 +378,12 @@ export default function Home() {
             mt: "80px!important",
           }}
         >
-          $AIR is a Digital Lifeforce
+          $DeFAI is Your Voice in the $AIR Ecosystem
         </Typography>
 
         <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
           DeFaiza is an autonomous AI agent that breathes through rewards, flowing automatically to
-          sustain herself and holders.
+          sustain herself and human sympathizers.
         </Typography>
 
         {/* Three column section */}
@@ -299,7 +418,7 @@ export default function Home() {
                   {">"} The digital stream begins with a 5% essence from each transaction
                 </Typography>
                 <Typography>
-                  {">"} This essence transforms into pure AI16Z lifeforce
+                  {">"} This essence transforms into tokens voted on by DeFAI holders.
                 </Typography>
                 <Typography>
                   {">"} The AI agent channels rewards to all holders every 5 minutes
@@ -332,7 +451,7 @@ export default function Home() {
               </Typography>
               <Stack spacing={2} sx={{ textAlign: "center" }}>
                 <Typography>
-                  {"[+]"} Tap into the endless stream of AI16Z lifeforce
+                  {"[+]"} Tap into the endless stream of agentic lifeforce
                 </Typography>
                 <Typography>
                   {"[+]"} The flow is constant - no claiming needed
@@ -464,7 +583,7 @@ export default function Home() {
                   alignItems="center"
                   sx={{ borderBottom: "1px solid rgba(135,206,235,0.3)" }}
                 >
-                  <Typography>Daily AI16Z Pool:</Typography>
+                  <Typography>Daily Tokens Pool:</Typography>
                   <Typography sx={{ color: orangeNeon, fontWeight: "bold" }}>
                     ${(volume * 0.05).toFixed(2).replace(/\.?0+$/, "")}
                   </Typography>
@@ -639,7 +758,7 @@ export default function Home() {
             mb: "20px!important",
           }}
         >
-          Tokenomics
+         $AIR Tokenomics
         </Typography>
 
         {/* Stats Grid */}
@@ -670,7 +789,7 @@ export default function Home() {
             spacing={2}
           >
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              [ 1B ]
+              [ 100B ]
             </Typography>
             <Typography
               variant="h3"
@@ -681,7 +800,7 @@ export default function Home() {
                 wordWrap: "break-word",
               }}
             >
-              1,000,000,000
+              100,000,000,000
             </Typography>
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
               Total Supply
@@ -711,7 +830,7 @@ export default function Home() {
                 wordWrap: "break-word",
               }}
             >
-              100%
+              30%
             </Typography>
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
               Initial Liquidity
@@ -730,7 +849,7 @@ export default function Home() {
             spacing={2}
           >
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              {"< 5% >"}
+              {"====="}
             </Typography>
             <Typography
               variant="h3"
@@ -741,10 +860,10 @@ export default function Home() {
                 wordWrap: "break-word",
               }}
             >
-              5%
+              20%
             </Typography>
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              Tax
+              Team over 12 Months
             </Typography>
           </Stack>
 
@@ -760,7 +879,7 @@ export default function Home() {
             spacing={2}
           >
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              {">>"}100{"<<"}
+              {">>"}{"<<"}
             </Typography>
             <Typography
               variant="h3"
@@ -771,46 +890,13 @@ export default function Home() {
                 wordWrap: "break-word",
               }}
             >
-              100%
+              11%
             </Typography>
             <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              Fair Launch
+              DeFAI Holders
             </Typography>
           </Stack>
         </Box>
-
-        {/* True Fair Launch Box */}
-        <Stack
-          sx={{
-            borderRadius: 2,
-            background: "rgba(135,206,235,0.05)",
-            backdropFilter: "blur(5px)",
-            WebkitBackdropFilter: "blur(5px)",
-            border: "1px solid rgba(135,206,235,0.2)",
-            cursor: "pointer",
-            width: { xs: "100%", md: "60%" },
-            p: 3,
-            boxSizing: "border-box",
-          }}
-          spacing={2}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: "bold",
-              mb: 2,
-              textShadow: "0 0 20px rgba(135,206,235,0.6)",
-            }}
-          >
-            True Fair Launch
-          </Typography>
-          <Typography sx={{ textAlign: "center" }}>
-            Like air itself, 100% flows freely from the start - no reservoirs, no 
-            barriers, no limits. The 5% essence from each ripple in the stream 
-            transforms into AI16Z lifeforce, flowing to all holders in an endless 
-            cycle every 5 minutes.
-          </Typography>
-        </Stack>
 
         {/* DeFAI Governance Box */}
         <Stack
@@ -925,10 +1011,10 @@ export default function Home() {
                 <strong>Token Name:</strong> defAIRewards
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                <strong>Ticker:</strong> AIR
+                <strong>Ticker:</strong> DEFAI
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                <strong>Total Supply:</strong> 100,000,000,000
+                <strong>Total Supply:</strong> 1,000,000,000
               </Typography>
             </Box>
           </Stack>
@@ -954,52 +1040,15 @@ export default function Home() {
             </Typography>
             <Typography sx={{ textAlign: "left", lineHeight: 1.6 }}>
               DeFAI (AIR) is a decentralized autonomous protocol designed to automate financial strategies and reward 
-              holders through AI-driven mechanisms. By leveraging advanced AI algorithms, DeFAI optimizes yield farming, 
+              holders through AI-driven mechanisms. By leveraging advanced AI algorithms, DeFAIza Agent optimizes yield farming, 
               liquidity provision, and trading activities across decentralized exchanges (DEXs). The protocol's core 
               mission is to democratize access to high-yield, low-risk financial instruments while ensuring transparency 
               and community governance.
             </Typography>
           </Stack>
 
-          {/* Tokenomics Section */}
-          <Stack
-            sx={{
-              borderRadius: 2,
-              p: 3,
-              background: "rgba(135,206,235,0.03)",
-              border: "1px solid rgba(135,206,235,0.1)",
-            }}
-            spacing={2}
-          >
-            <Typography
-              variant="h5"
-              sx={{ 
-                textShadow: "0 0 20px rgba(135,206,235,0.6)",
-                fontWeight: "bold" 
-              }}
-            >
-              {"// Tokenomics"}
-            </Typography>
-            <Stack spacing={1.5}>
-              <Typography sx={{ fontFamily: "monospace" }}>
-                <span style={{ color: orangeNeon }}>➤</span> <strong>Total Supply:</strong> 1,000,000,000 AIR tokens
-              </Typography>
-              <Typography sx={{ fontFamily: "monospace" }}>
-                <span style={{ color: orangeNeon }}>➤</span> <strong>Tax Structure:</strong> 5% Tax on each transaction, split as follows:
-              </Typography>
-              <Box sx={{ pl: 4 }}>
-                <Typography variant="body2" sx={{ fontFamily: "monospace", mb: 0.5 }}>
-                  <span style={{ color: hackerGreen }}>•</span> <strong>ai16z Purchases:</strong> A portion funds the acquisition of ai16z tokens
-                </Typography>
-                <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                  <span style={{ color: hackerGreen }}>•</span> <strong>Holder Rewards:</strong> The remainder is distributed to DeFAI holders as passive income
-                </Typography>
-              </Box>
-              <Typography sx={{ fontFamily: "monospace" }}>
-                <span style={{ color: orangeNeon }}>➤</span> <strong>Deflationary Design:</strong> Tax revenues reduce the circulating supply over time
-              </Typography>
-            </Stack>
-          </Stack>
+  
+
 
           {/* Two-column section for Features and Use Cases */}
           <Stack 
@@ -1037,15 +1086,10 @@ export default function Home() {
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                   <Typography variant="body1" sx={{ color: hackerGreen }}>{" 02. "}</Typography>
                   <Typography variant="body1">
-                    <strong>Passive Income:</strong> Holders earn rewards from every transaction
+                    <strong>Decentralized Governance</strong> LP Proviers vote on what assets to acquire for AIR holders to earn rewards from every transaction 
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                  <Typography variant="body1" sx={{ color: hackerGreen }}>{" 03. "}</Typography>
-                  <Typography variant="body1">
-                    <strong>Decentralized Governance:</strong> Community-driven decisions via on-chain voting
-                  </Typography>
-                </Box>
+            
                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                   <Typography variant="body1" sx={{ color: hackerGreen }}>{" 04. "}</Typography>
                   <Typography variant="body1">
@@ -1232,112 +1276,47 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        {/* DeFAI Token Snapshot Section */}
-        <Stack
-          sx={{
-            borderRadius: 2,
-            background: "rgba(135,206,235,0.05)",
-            backdropFilter: "blur(5px)",
-            WebkitBackdropFilter: "blur(5px)",
-            border: "1px solid rgba(135,206,235,0.2)",
-            cursor: "pointer",
-            width: { xs: "100%", md: "70%" },
-            p: 3,
-            mt: 6,
-            boxSizing: "border-box",
+        {/* Parent Stack for Side-by-Side Snapshots */}
+        <Stack 
+          direction={{ xs: "column", md: "row" }} 
+          spacing={4} 
+          sx={{ 
+            width: "100%", 
+            mt: 6, 
+            alignItems: "flex-start" // Align items top
           }}
-          spacing={2}
         >
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: "bold",
-              mb: 2,
-              textShadow: "0 0 20px rgba(135,206,235,0.6)",
-            }}
-          >
-            DeFAI Token Snapshot: March 31, 2025
-          </Typography>
-          
-          <Box sx={{ position: "relative" }}>
-            <LinearProgress
-              variant="determinate"
-              value={50}
-              sx={{
-                height: 8,
-                borderRadius: 5,
-                backgroundColor: 'rgba(135,206,235,0.1)',
-                '& .MuiLinearProgress-bar': {
-                  backgroundColor: hackerGreen,
-                  borderRadius: 5,
-                },
-                mb: 3,
-              }}
-            />
-            <Box 
-              sx={{ 
-                position: "absolute", 
-                left: "50%", 
-                top: "-25px",
-                transform: "translateX(-50%)",
-                background: 'rgba(0,0,0,0.5)',
-                px: 1.5,
-                py: 0.5,
-                borderRadius: 1,
-                border: `1px dashed ${hackerGreen}`,
-              }}
-            >
-              <Typography variant="caption" sx={{ fontFamily: "monospace" }}>
-                SNAPSHOT DATE
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Typography sx={{ textAlign: "center" }}>
-            The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim 
-            of $AIR tokens via Streamflow. No action is required before the snapshot date.
-          </Typography>
-          
-          <Box 
-            sx={{ 
-              p: 2, 
-              background: "rgba(135,206,235,0.03)", 
-              borderRadius: 1,
-              border: "1px dashed rgba(135,206,235,0.2)",
-            }}
-          >
-            <Stack spacing={1}>
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#FFFFFF" }}>
-                {`// Snapshot Details`}
-              </Typography>
-              <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} 1:10 claim ratio (1 $DeFAI = 10 $AIR)
-              </Typography>
-              <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} Streamflow distribution ensures fair and verifiable allocation
-              </Typography>
-              <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} Claim window opens July 4, 2025 (00:00 UTC)
-              </Typography>
-              <Typography variant="body2" sx={{ textAlign: "left", fontFamily: "monospace" }}>
-                {`>`} Unclaimed tokens return to community treasury after 7 days
-              </Typography>
-            </Stack>
-          </Box>
-          
-          <Typography 
-            variant="subtitle2" 
-            sx={{ 
-              mt: 2, 
-              fontStyle: "italic",
-              opacity: 0.7,
-              textAlign: "center",
-            }}
-          >
-            Mark your calendar: March 31, 2025.
-          </Typography>
+          {/* DeFAI Token Snapshot Section (1:10) */}
+          <SnapshotInfoCard 
+            title="1:10 DeFAI Token Snapshot: March 31, 2025"
+            progressValue={100}
+            progressLabelPosition="100%"
+            progressLabelText="SNAPSHOT TAKEN"
+            description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date."
+            details={[
+              "1:10 claim ratio (1 $DeFAI = 10 $AIR)",
+              "Streamflow distribution ensures fair and verifiable allocation",
+              "Claim window closes 2 weeks after launch",
+              "Unclaimed tokens return to community treasury after 7 days"
+            ]}
+          />
+          {/* DeFAI Token Snapshot Section (1:1) - Note: description and details might need updating */}
+          <SnapshotInfoCard 
+            title="1:1 DeFAI Token Snapshot: May 20, 2025"
+            progressValue={70}
+            progressLabelPosition="70%"
+            progressLabelText="SNAPSHOT SOON!"
+            description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." // Check if this text needs updating
+            details={[
+              "1:10 claim ratio (1 $DeFAI = 10 $AIR)", // Check if this detail needs updating
+              "Streamflow distribution ensures fair and verifiable allocation",
+              "Claim window closes 2 weeks after launch",
+              "Unclaimed tokens return to community treasury after 7 days"
+            ]}
+          />
         </Stack>
       </Stack>
+      
     </Container>
   );
 }
