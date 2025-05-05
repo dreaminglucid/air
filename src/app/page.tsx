@@ -817,23 +817,43 @@ export default function Home() {
             alignItems="center"
             sx={{ flexWrap: 'wrap' }} // Allow wrapping on smaller screens
           >
-            <Box 
+             <Box 
               component="img"
               src="/animoca.png"
               alt="Animoca Brands Logo"
               sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
             />
-            <Box 
+             <Box 
+              component="img"
+              src="/systems.png"
+              alt="ElizaSystems Logo"
+              sx={{ height: { xs: 40, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+             <Box 
               component="img"
               src="/transform.png"
               alt="Transform Logo"
               sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
             />
+           
+           
             <Box 
               component="img"
               src="/dnafund.png"
               alt="DNA Fund Logo"
               sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+            <Box 
+              component="img"
+              src="/omega.png"
+              alt="Omega Logo"
+              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+             <Box 
+              component="img"
+              src="/elizaos.png"
+              alt="Elizaos Logo"
+              sx={{ height: { xs: 40, md: 20 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
             />
           </Stack>
         </Stack>
