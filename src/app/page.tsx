@@ -233,6 +233,29 @@ export default function Home() {
     delay: Math.random() * 5,
   }));
 
+  // List of slide images
+  const slideImages = [
+    '/slide1_new.png',
+    '/slide_3.png',
+    '/slide_6.png',
+    '/slide_7.png',
+    '/slide_8.png',
+    '/slide_9.png',
+    '/slide_11.png',
+  ];
+
+  // Add background slide positions
+  const backgroundSlides = slideImages.map((src, i) => ({
+    id: `slide-${i}`,
+    src: src,
+    left: `${Math.random() * 80 + 10}%`, // Position between 10% and 90%
+    top: `${Math.random() * 80 + 10}%`,  // Position between 10% and 90%
+    rotation: Math.random() * 60 - 30, // Rotate between -30deg and 30deg
+    size: Math.random() * 150 + 100,  // Size between 100px and 250px
+    duration: Math.random() * 20 + 15, // Float animation duration
+    delay: Math.random() * 8,        // Float animation delay
+  }));
+
   return (
     <Container 
       sx={{ 
@@ -268,6 +291,29 @@ export default function Home() {
             animation: `${float} ${particle.duration}s infinite ease-in-out`,
             animationDelay: `${particle.delay}s`,
             pointerEvents: "none",
+          }}
+        />
+      ))}
+
+      {/* Add scattered background slides */}
+      {!disableAnimations && backgroundSlides.map((slide) => (
+        <Box
+          key={slide.id}
+          component="img"
+          src={slide.src}
+          alt="" // Decorative image, empty alt
+          sx={{
+            position: "absolute",
+            left: slide.left,
+            top: slide.top,
+            width: slide.size,
+            height: 'auto', // Maintain aspect ratio
+            transform: `rotate(${slide.rotation}deg) translate(-50%, -50%)`, // Center image on position and rotate
+            opacity: 0.1, // Increase opacity
+            zIndex: 0, // Ensure they are behind content
+            pointerEvents: "none",
+            animation: `${float} ${slide.duration}s infinite ease-in-out`,
+            animationDelay: `${slide.delay}s`,
           }}
         />
       ))}

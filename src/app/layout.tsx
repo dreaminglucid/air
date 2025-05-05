@@ -18,13 +18,13 @@ export const metadata: Metadata = {
   description: "DeFAI Rewards",
   icons: {
     icon: [
-      { url: "/defaiza.png" }
+      { url: "/icon.png" }
     ],
     apple: [
-      { url: "/defaiza.png" }
+      { url: "/icon.png" }
     ],
     shortcut: [
-      { url: "/defaiza.png" }
+      { url: "/icon.png" }
     ]
   },
 };
