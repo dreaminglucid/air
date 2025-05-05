@@ -411,7 +411,7 @@ export default function Home() {
           <Button
             variant="outlined"
             component="a"
-            href="https://t.me/DeFAI_Portal"
+            href="https://t.me/defairewards"
             target="_blank"
             rel="noopener noreferrer"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
