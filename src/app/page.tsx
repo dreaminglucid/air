@@ -794,7 +794,51 @@ export default function Home() {
           </Stack>
         </Stack>
 
-        {/* Tokenomics Section */}
+        {/* Partners Section */}
+        <Stack
+          spacing={4}
+          alignItems="center"
+          sx={{ width: "100%", mt: 8 }}
+        >
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: 48,
+              fontWeight: "bold",
+              textShadow: "0 0 20px rgba(135,206,235,0.6)",
+            }}
+          >
+            Our Partners
+          </Typography>
+          <Stack 
+            direction="row" 
+            spacing={{ xs: 2, md: 4 }} // Adjust spacing as needed
+            justifyContent="center" 
+            alignItems="center"
+            sx={{ flexWrap: 'wrap' }} // Allow wrapping on smaller screens
+          >
+            <Box 
+              component="img"
+              src="/animoca.png"
+              alt="Animoca Brands Logo"
+              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+            <Box 
+              component="img"
+              src="/transform.png"
+              alt="Transform Logo"
+              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+            <Box 
+              component="img"
+              src="/dnafund.png"
+              alt="DNA Fund Logo"
+              sx={{ height: { xs: 40, md: 60 }, width: 'auto', filter: 'brightness(0) invert(1)' }} // Adjust height, make white
+            />
+          </Stack>
+        </Stack>
+
+        {/* $AIR Tokenomics Section */}
         <Typography
           variant="h2"
           sx={{
