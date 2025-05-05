@@ -1471,7 +1471,7 @@ export default function Home() {
             progressLabelText="SNAPSHOT SOON!"
             description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." // Check if this text needs updating
             details={[
-              "1:10 claim ratio (1 $DeFAI = 10 $AIR)", // Check if this detail needs updating
+              "1:1 claim ratio (1 $DeFAI = 10 $AIR)", // Check if this detail needs updating
               "Streamflow distribution ensures fair and verifiable allocation",
               "Claim window closes 2 weeks after launch",
               "Unclaimed tokens return to community treasury after 7 days"
