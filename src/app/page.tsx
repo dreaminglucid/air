@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Container, Stack, Typography, Button, Box } from '@mui/material';
+import { Container, Stack, Typography, Button, Box, Grid, LinearProgress } from '@mui/material';
 import Link from 'next/link';
 import { keyframes } from '@mui/system';
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -13,12 +13,12 @@ const marquee = keyframes`
   100% { transform: translateX(-50%); } // Translate by half (since content is doubled)
 `;
 
-const float = keyframes` // float is already defined, ensuring it stays if needed elsewhere, or removing if truly unused.
-  0% { transform: translateY(0px) translateX(0px); }
-  25% { transform: translateY(-10px) translateX(5px); }
-  50% { transform: translateY(0px) translateX(10px); }
-  75% { transform: translateY(10px) translateX(5px); }
-  100% { transform: translateY(0px) translateX(0px); }
+const float = keyframes`
+  0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  25% { transform: translateY(-8px) translateX(4px) rotate(1deg); }
+  50% { transform: translateY(0px) translateX(8px) rotate(0deg); }
+  75% { transform: translateY(8px) translateX(4px) rotate(-1deg); }
+  100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
 `;
 
 // IconWithFallback component (copied from tokenomics page)
@@ -40,6 +40,61 @@ const IconWithFallback = ({ icon, width, color }: { icon: string, width: number,
     />
   );
 };
+
+interface SnapshotInfoCardProps {
+  title: string;
+  progressValue: number;
+  progressLabelPosition: string;
+  progressLabelText: string;
+  description: string;
+  details: string[];
+}
+
+const SnapshotInfoCard = ({ title, progressValue, progressLabelPosition, progressLabelText, description, details }: SnapshotInfoCardProps) => {
+  const hackerGreen = "#87CEEB"; 
+  return (
+    <Stack
+      sx={{
+        flex: 1, 
+        borderRadius: 2,
+        background: "rgba(0,0,0,0.02)", 
+        border: "1px solid rgba(0,0,0,0.1)", 
+        cursor: "pointer",
+        p: 3,
+        boxSizing: "border-box",
+        height: '100%', 
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
+      }}
+      spacing={2}
+    >
+      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: '#000000' }}>{title}</Typography>
+      <Box sx={{ position: "relative" }}>
+        <LinearProgress variant="determinate" value={progressValue} sx={{ height: 8, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.05)', '& .MuiLinearProgress-bar': { backgroundColor: hackerGreen, borderRadius: 5, }, mb: 3, }} />
+        <Box sx={{ position: "absolute", left: progressLabelPosition, top: "-25px", transform: "translateX(-50%)", background: 'rgba(255,255,255,0.8)', color: '#000000', px: 1.5, py: 0.5, borderRadius: 1, border: `1px dashed ${hackerGreen}`, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+          <Typography variant="caption" sx={{ fontFamily: "monospace" }}>{progressLabelText}</Typography>
+        </Box>
+      </Box>
+      <Typography sx={{ textAlign: "center", color: '#333333' }}>{description}</Typography>
+      <Box sx={{ p: 2, background: "rgba(0,0,0,0.01)", borderRadius: 1, border: "1px dashed rgba(0,0,0,0.1)", }}>
+        <Stack spacing={1}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#000000" }}>{`// Snapshot Details`}</Typography>
+          {details.map((detail, index) => ( <Typography key={index} variant="body2" sx={{ textAlign: "left", fontFamily: "monospace", color: '#333333' }}>{`> ${detail}`}</Typography> ))}
+        </Stack>
+      </Box>
+    </Stack>
+  );
+};
+
+const partnerLogos = [
+  { src: "/animoca.png", alt: "Animoca Brands Logo", sizeFactor: 1, href: "https://animocabrands.com" },
+  { src: "/systems.png", alt: "ElizaSystems Logo", sizeFactor: 0.7, href: "https://eliza.systems" },
+  { src: "/transform.png", alt: "Transform Logo", sizeFactor: 1, href: "https://transformgroup.com" },
+  { src: "/zokyo.png", alt: "Zokyo Logo", sizeFactor: 1, href: "https://zokyo.io" },
+  { src: "/dnafund.png", alt: "DNA Fund Logo", sizeFactor: 1, href: "https://dna.fund" },
+  { src: "/omega.png", alt: "Omega Logo", sizeFactor: 1, href: "https://omegadao.chat/ },
+  { src: "/boosty.png", alt: "Boosty Logo", sizeFactor: 1, href: "https://boostylabs.com" },
+  { src: "/elizaos.png", alt: "Elizaos Logo", sizeFactor: 0.7, href: "https://elizaos.ai" },
+];
 
 export default function BankingAILandingPage() {
   const primaryTextColor = "#000000"; // Black text
@@ -187,121 +242,63 @@ export default function BankingAILandingPage() {
         />
       </Box>
 
-      {/* Partners Section - Moved from Tokenomics */}
+      {/* Partners Section - Bubble Grid Effect */}
       <Stack
-        spacing={2} 
+        spacing={3} // Increased spacing for title and grid
         alignItems="center"
-        sx={{ 
-          width: "100%", 
-          mt: {xs: 4, md: 6}, // Margin top from the image above
-          mb: 4, // Margin bottom for spacing at page end
-          color: '#666', // Adjust text color for light background
-          backgroundColor: '#f9f9f9', // Optional: slight background for this section
-          py: 4, // Padding top/bottom for the section
-        }}
+        sx={{ width: "100%", mt: {xs: 4, md: 8}, mb: 4, backgroundColor: '#f9f9f9', py: {xs: 3, md: 5} }}
       >
-        <Typography
-          variant="h4" 
-          sx={{
-            fontSize: { xs: 28, md: 36 }, 
-            fontWeight: "bold",
-            // textShadow: "0 0 15px rgba(0,0,0,0.1)", // Softer shadow for light bg
-            color: primaryTextColor, // Use main text color
-            mb: 3,
-          }}
-        >
-          Our Partners
-        </Typography>
-        <Box
-          sx={{
-            overflow: 'hidden',
-            width: '90%', 
-            maxWidth: '1000px', 
-            mx: 'auto',
-            position: 'relative',
-            // Adjust fading edges for light background if needed
-            '&::before, &::after': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              width: '50px',
-              zIndex: 2,
-            },
-            '&::before': {
-              left: 0,
-              background: 'linear-gradient(to right, #f9f9f9 0%, transparent 100%)', // Match section bg
-            },
-            '&::after': {
-              right: 0,
-              background: 'linear-gradient(to left, #f9f9f9 0%, transparent 100%)', // Match section bg
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              width: 'fit-content', 
-              animation: `${marquee} 30s linear infinite`, 
-              '&:hover': {
-                animationPlayState: 'paused',
-              },
-            }}
-          >
-            {[...Array(2)].map((_, i) => (
-              <Stack direction="row" spacing={6} key={i} alignItems="center" sx={{ px: 3}}>
+        <Typography variant="h4" sx={{ fontSize: { xs: 28, md: 36 }, fontWeight: "bold", color: primaryTextColor, mb: 2 }}>Our Partners</Typography>
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center" sx={{ px: { xs: 1, sm: 2 }, maxWidth: '1000px' }}>
+          {partnerLogos.map((partner, index) => (
+            <Grid item key={partner.alt} xs={6} sm={4} md={3}>
+              <Link href={partner.href} passHref target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <Box
-                  component="img"
-                  src="/animoca.png"
-                  alt="Animoca Brands Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/systems.png"
-                  alt="ElizaSystems Logo"
-                  sx={{ height: { xs: 15, md: 20 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/transform.png"
-                  alt="Transform Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/dnafund.png"
-                  alt="DNA Fund Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/omega.png"
-                  alt="Omega Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/elizaos.png"
-                  alt="Elizaos Logo"
-                  sx={{ height: { xs: 15, md: 20 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/zokyo.png"
-                  alt="Zokyo Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-                <Box
-                  component="img"
-                  src="/boosty.png"
-                  alt="Boosty Logo"
-                  sx={{ height: { xs: 25, md: 40 }, width: 'auto', verticalAlign: 'middle', filter: 'grayscale(100%) brightness(0%) invert(0%)' }}
-                />
-              </Stack>
-            ))}
-          </Box>
-        </Box>
+                  sx={{
+                    width: { xs: 100, sm: 120 }, // Bubble size
+                    height: { xs: 100, sm: 120 },
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff', // White background for bubble
+                    boxShadow: '0px 4px 15px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '15px',
+                    mx: 'auto', // Center bubble in grid item
+                    animation: `${float} ${Math.random() * 5 + 15}s infinite ease-in-out`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                      boxShadow: '0px 6px 20px rgba(0,0,0,0.15)',
+                    },
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  }}
+                >
+                  <img 
+                    src={partner.src} 
+                    alt={partner.alt} 
+                    style={{ 
+                      maxWidth: `calc(100% * ${partner.sizeFactor || 0.7})`, // Adjust max width based on factor
+                      maxHeight: `calc(100% * ${partner.sizeFactor || 0.7})`, 
+                      objectFit: 'contain', 
+                      filter: 'grayscale(100%) brightness(0%) invert(0%)'
+                    }}
+                  />
+                </Box>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Stack>
+
+      {/* Snapshots Section (if still needed here) */}
+      <Stack 
+        direction={{ xs: "column", md: "row" }} 
+        spacing={4} 
+        sx={{ width: "100%", maxWidth: '1200px', mx: 'auto', mt: {xs: 4, md: 6}, mb: 4, px: 2, alignItems: "flex-start" }}
+      >
+        <SnapshotInfoCard title="1:10 DeFAI Token Snapshot: March 31, 2025" progressValue={100} progressLabelPosition="100%" progressLabelText="SNAPSHOT TAKEN" description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." details={["1:10 claim ratio (1 $DeFAI = 10 $AIR)","Streamflow distribution ensures fair and verifiable allocation","Claim window closes 2 weeks after launch","Unclaimed tokens return to community treasury after 7 days"]}/>
+        <SnapshotInfoCard title="1:1 DeFAI Token Snapshot: May 20, 2025" progressValue={70} progressLabelPosition="70%" progressLabelText="SNAPSHOT SOON!" description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." details={["1:1 claim ratio (1 $DeFAI = 1 $AIR)","Streamflow distribution ensures fair and verifiable allocation","Claim window closes 2 weeks after launch","Unclaimed tokens return to community treasury after 7 days"]}/>
       </Stack>
 
     </Container>
