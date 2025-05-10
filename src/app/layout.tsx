@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "DeFAI Rewards",
   icons: {
     icon: [
-      { url: "/icon.png" }
+      { url: "/favicon.ico" }
     ],
     apple: [
       { url: "/icon.png" }

@@ -426,16 +426,7 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
             <IconWithFallback icon="mdi:twitter" width={30} color={orangeNeon} />
           </Button>
           */}
-          <Button
-            variant="outlined"
-            component="a"
-            href="https://t.me/defairewards"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ color: hackerGreen, borderColor: hackerGreen }}
-          >
-            <IconWithFallback icon="mdi:telegram" width={30} color={hackerGreen} />
-          </Button>
+        
           <Button
             variant="outlined"
             component="a"
