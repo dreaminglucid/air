@@ -119,7 +119,7 @@ const snapshotData = [
     progressValue: 70,
     progressLabelPosition: "70%",
     progressLabelText: "SNAPSHOT SOON!",
-    description: "The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date.",
+    description: "The snapshot of $DeFAI holders will be taked on May 20, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date.",
     details: [
       "1:1 claim ratio (1 $DeFAI = 1 $AIR)", 
       "Streamflow distribution ensures fair and verifiable allocation",
