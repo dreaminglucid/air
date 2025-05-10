@@ -91,7 +91,7 @@ const partnerLogos = [
   { src: "/transform.png", alt: "Transform Logo", sizeFactor: 1, href: "https://transformgroup.com" },
   { src: "/zokyo.png", alt: "Zokyo Logo", sizeFactor: 1, href: "https://zokyo.io" },
   { src: "/dnafund.png", alt: "DNA Fund Logo", sizeFactor: 1, href: "https://dna.fund" },
-  { src: "/omega.png", alt: "Omega Logo", sizeFactor: 1, href: "https://omegadao.chat/ },
+  { src: "/omega.png", alt: "Omega Logo", sizeFactor: 1, href: "https://omegadao.chat/" },
   { src: "/boosty.png", alt: "Boosty Logo", sizeFactor: 1, href: "https://boostylabs.com" },
   { src: "/elizaos.png", alt: "Elizaos Logo", sizeFactor: 0.7, href: "https://elizaos.ai" },
 ];
