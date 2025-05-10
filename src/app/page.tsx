@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Container, Stack, Typography, Button, Box, Grid, LinearProgress } from '@mui/material';
+import { Container, Stack, Typography, Button, Box, Grid, LinearProgress, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import Link from 'next/link';
 import { keyframes } from '@mui/system';
 import { Icon } from "@iconify/react/dist/iconify.js";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // Removed keyframes as particles are gone and typewriter handles its own cursor if needed
 
@@ -96,6 +97,38 @@ const partnerLogos = [
   { src: "/elizaos.png", alt: "Elizaos Logo", sizeFactor: 0.7, href: "https://elizaos.ai" },
 ];
 
+// Data for the snapshot accordions
+const snapshotData = [
+  {
+    id: 'snapshot1',
+    title: "1:10 DeFAI Token Snapshot: March 31, 2025",
+    progressValue: 100,
+    progressLabelPosition: "100%",
+    progressLabelText: "SNAPSHOT TAKEN",
+    description: "The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date.",
+    details: [
+      "1:10 claim ratio (1 $DeFAI = 10 $AIR)",
+      "Streamflow distribution ensures fair and verifiable allocation",
+      "Claim window closes 2 weeks after launch",
+      "Unclaimed tokens return to community treasury after 7 days"
+    ]
+  },
+  {
+    id: 'snapshot2',
+    title: "1:1 DeFAI Token Snapshot: May 20, 2025",
+    progressValue: 70,
+    progressLabelPosition: "70%",
+    progressLabelText: "SNAPSHOT SOON!",
+    description: "The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date.",
+    details: [
+      "1:1 claim ratio (1 $DeFAI = 1 $AIR)", 
+      "Streamflow distribution ensures fair and verifiable allocation",
+      "Claim window closes 2 weeks after launch",
+      "Unclaimed tokens return to community treasury after 7 days"
+    ]
+  }
+];
+
 export default function BankingAILandingPage() {
   const primaryTextColor = "#000000"; // Black text
   const hackerGreen = "#87CEEB"; // Main blue color
@@ -109,6 +142,12 @@ export default function BankingAILandingPage() {
   }, []);
 
   // Removed email state and handler
+
+  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(false);
+
+  const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpandedAccordion(isExpanded ? panel : false);
+  };
 
   return (
     <Container
@@ -291,14 +330,55 @@ export default function BankingAILandingPage() {
         </Grid>
       </Stack>
 
-      {/* Snapshots Section (if still needed here) */}
+      {/* Snapshots Section - Accordion Style */}
       <Stack 
-        direction={{ xs: "column", md: "row" }} 
-        spacing={4} 
-        sx={{ width: "100%", maxWidth: '1200px', mx: 'auto', mt: {xs: 4, md: 6}, mb: 4, px: 2, alignItems: "flex-start" }}
+        spacing={2} // Spacing between accordions
+        sx={{ 
+          width: "100%", 
+          maxWidth: '900px', // Max width for accordion section
+          mx: 'auto', 
+          mt: {xs: 4, md: 6}, 
+          mb: 4,
+          px: 2, 
+        }}
       >
-        <SnapshotInfoCard title="1:10 DeFAI Token Snapshot: March 31, 2025" progressValue={100} progressLabelPosition="100%" progressLabelText="SNAPSHOT TAKEN" description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." details={["1:10 claim ratio (1 $DeFAI = 10 $AIR)","Streamflow distribution ensures fair and verifiable allocation","Claim window closes 2 weeks after launch","Unclaimed tokens return to community treasury after 7 days"]}/>
-        <SnapshotInfoCard title="1:1 DeFAI Token Snapshot: May 20, 2025" progressValue={70} progressLabelPosition="70%" progressLabelText="SNAPSHOT SOON!" description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." details={["1:1 claim ratio (1 $DeFAI = 1 $AIR)","Streamflow distribution ensures fair and verifiable allocation","Claim window closes 2 weeks after launch","Unclaimed tokens return to community treasury after 7 days"]}/>
+        {snapshotData.map((snapshot) => (
+          <Accordion 
+            key={snapshot.id} 
+            expanded={expandedAccordion === snapshot.id} 
+            onChange={handleAccordionChange(snapshot.id)}
+            sx={{
+              background: "rgba(0,0,0,0.02)",
+              border: "1px solid rgba(0,0,0,0.1)",
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              '&.Mui-expanded': {
+                margin: '16px 0' // Add margin when expanded
+              },
+              '&::before': {
+                 display: 'none', // Remove default top border from accordion
+              }
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{color: primaryTextColor}}/>}
+              aria-controls={`${snapshot.id}-content`}
+              id={`${snapshot.id}-header`}
+              sx={{ '& .MuiAccordionSummary-content': { marginY: '12px'} }}
+            >
+              <Typography variant="h6" sx={{color: primaryTextColor, fontWeight: 'medium'}}>{snapshot.title}</Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ backgroundColor: 'rgba(0,0,0,0.01)', paddingTop: 0}}>
+              <SnapshotInfoCard 
+                title="" // Title is now in AccordionSummary, so pass empty or remove from card if not needed internally
+                progressValue={snapshot.progressValue}
+                progressLabelPosition={snapshot.progressLabelPosition}
+                progressLabelText={snapshot.progressLabelText}
+                description={snapshot.description}
+                details={snapshot.details}
+              />
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </Stack>
 
     </Container>
