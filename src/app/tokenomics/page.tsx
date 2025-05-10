@@ -274,12 +274,16 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
 
   return (
     <Container 
+      maxWidth={false} // Make container full width
       sx={{ 
         background: "linear-gradient(180deg, #000000 0%, #1a1a2e 100%)", 
         color: hackerGreen, 
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
+        paddingLeft: 0, // Remove default horizontal padding
+        paddingRight: 0,
+        width: '100vw', // Explicitly set to full viewport width
         "&::before": {
           content: '""',
           position: "absolute",
@@ -343,6 +347,7 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           py: 8,
           position: "relative",
           zIndex: 1,
+          width: '100%', // Ensure stack itself can utilize full width if needed by children
         }}
       >
         {/* Token badges - side by side */}
@@ -389,13 +394,13 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
         </Typography>
 
         {/* Subtitle */}
-        <Typography variant="h5" sx={{ mb: 4 }}>
+        <Typography variant="h5" sx={{ mb: 4 }}> 
         First Agent Bank of DeFAI Optimizing Yield Agenticly Across Generations
         </Typography>
-
         {/* Buttons row */}
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{mb:4}}>
          
+          {/* Button to be removed 
           <Button
             variant="outlined"
             sx={{ color: hackerGreen, borderColor: hackerGreen }}
@@ -407,6 +412,8 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
             <IconWithFallback icon="mdi:chart-box" width={30} color={hackerGreen} />
             &nbsp;Chart
           </Button>
+          */}
+          {/* Button to be removed 
           <Button
             variant="outlined"
             component="a"
@@ -418,6 +425,7 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           >
             <IconWithFallback icon="mdi:twitter" width={30} color={orangeNeon} />
           </Button>
+          */}
           <Button
             variant="outlined"
             component="a"
@@ -428,12 +436,11 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           >
             <IconWithFallback icon="mdi:telegram" width={30} color={hackerGreen} />
           </Button>
-          {/* Add Preview Button */}
           <Button
             variant="outlined"
             component="a"
-            href="/preview" // Link to the preview page
-            sx={{ color: orangeNeon, borderColor: orangeNeon }} // Style like Twitter button
+            href="/preview" 
+            sx={{ color: orangeNeon, borderColor: orangeNeon }} 
           >
             <IconWithFallback icon="mdi:eye-outline" width={30} color={orangeNeon} />
             &nbsp;Preview
@@ -821,32 +828,31 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           </Stack>
         </Stack>
 
-        {/* Partners Section - Marquee */}
+        {/* Partners Section - Marquee -- THIS ENTIRE BLOCK WILL BE REMOVED */}
+        {/*
         <Stack
-          spacing={2} // Reduced spacing for title and marquee
+          spacing={2} 
           alignItems="center"
-          sx={{ width: "100%", mt: 8, mb: 4 }} // Added margin-bottom
+          sx={{ width: "100%", mt: 8, mb: 4 }} 
         >
           <Typography
-            variant="h4" // Slightly smaller heading
+            variant="h4" 
             sx={{
-              fontSize: { xs: 32, md: 40 }, // Responsive size
+              fontSize: { xs: 32, md: 40 }, 
               fontWeight: "bold",
               textShadow: "0 0 15px rgba(135,206,235,0.5)",
-              mb: 3, // Margin below title
+              mb: 3, 
             }}
           >
             Our Partners
           </Typography>
-          {/* Marquee Container */}
           <Box
             sx={{
               overflow: 'hidden',
-              width: '90%', // Limit width slightly
-              maxWidth: '1000px', // Max width
+              width: '90%', 
+              maxWidth: '1000px', 
               mx: 'auto',
               position: 'relative',
-              // Optional: Add fading edges
               '&::before, &::after': {
                 content: '""',
                 position: 'absolute',
@@ -857,28 +863,26 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
               },
               '&::before': {
                 left: 0,
-                background: 'linear-gradient(to right, #0d0d1a 0%, transparent 100%)', // Match background start color
+                background: 'linear-gradient(to right, #0d0d1a 0%, transparent 100%)', 
               },
               '&::after': {
                 right: 0,
-                background: 'linear-gradient(to left, #1a1a2e 0%, transparent 100%)', // Match background end color
+                background: 'linear-gradient(to left, #1a1a2e 0%, transparent 100%)', 
               },
             }}
           >
-            {/* Animated Inner Container */}
             <Box
               sx={{
                 display: 'flex',
-                width: 'fit-content', // Adjust width to content
-                animation: `${marquee} 30s linear infinite`, // Apply animation (adjust duration as needed)
+                width: 'fit-content', 
+                animation: `${marquee} 30s linear infinite`, 
                 '&:hover': {
                   animationPlayState: 'paused',
                 },
               }}
             >
-              {/* Render Logos Twice for Seamless Loop */}
               {[...Array(2)].map((_, i) => (
-                <Stack direction="row" spacing={6} key={i} alignItems="center" sx={{ px: 3}}> {/* Add spacing between logos */}
+                <Stack direction="row" spacing={6} key={i} alignItems="center" sx={{ px: 3}}>
                   <Box
                     component="img"
                     src="/animoca.png"
@@ -920,6 +924,7 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
             </Box>
           </Box>
         </Stack>
+        */}
 
         {/* $AIR Tokenomics Section */}
         <Typography
@@ -932,161 +937,165 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           }}
         >
          $AIR Tokenomics
-        </Typography>
+       </Typography>
 
-        {/* Stats Grid */}
-        <Box
-          display="grid"
-          gridTemplateColumns={{
-            xs: "1fr",          // Single column on very small screens
-            sm: "repeat(2, 1fr)" // Two columns on small screens and up
-          }}
-          gap={2}
+        {/* Stats Grid - Entire section commented out by user, ensuring comments are clean */}
+        {/* 
+         <Box
+            display="grid"
+            gridTemplateColumns={{
+              xs: "1fr",          
+              sm: "repeat(2, 1fr)" 
+            }}
+            gap={2}
+            sx={{
+              width: "100%",
+              mb: 4,
+              "& > *": {
+                minWidth: 0, 
+              },
+            }}
+          >
+           <Stack
+              sx={{
+                borderRadius: 2,
+                p: { xs: 1, sm: 3 },
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
+                cursor: "pointer",
+              }}
+              spacing={2}
+            >
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                [ 100B ]
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 0 20px rgba(135,206,235,0.6)",
+                  fontSize: { xs: "2rem", sm: "3rem" },
+                  wordWrap: "break-word",
+                }}
+              >
+                100,000,000,000
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                Total Supply
+              </Typography>
+            </Stack>
+  
+            <Stack
+              sx={{
+                borderRadius: 2,
+                p: { xs: 1, sm: 3 },
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
+                cursor: "pointer",
+              }}
+              spacing={2}
+            >
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                =====
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 0 20px rgba(135,206,235,0.6)",
+                  fontSize: { xs: "2rem", sm: "3rem" },
+                  wordWrap: "break-word",
+                }}
+              >
+                30%
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                Initial Liquidity
+              </Typography>
+            </Stack>
+  
+            <Stack
+              sx={{
+                borderRadius: 2,
+                p: { xs: 1, sm: 3 },
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
+                cursor: "pointer",
+              }}
+              spacing={2}
+            >
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                {"====="}
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 0 20px rgba(135,206,235,0.6)",
+                  fontSize: { xs: "2rem", sm: "3rem" },
+                  wordWrap: "break-word",
+                }}
+              >
+                20%
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                Team over 12 Months
+              </Typography>
+            </Stack>
+  
+            <Stack
+              sx={{
+                borderRadius: 2,
+                p: { xs: 1, sm: 3 },
+                background: "rgba(135,206,235,0.05)",
+                border: "1px solid rgba(135,206,235,0.2)",
+                cursor: "pointer",
+              }}
+              spacing={2}
+            >
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                {">>"}{"<<"}
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 0 20px rgba(135,206,235,0.6)",
+                  fontSize: { xs: "2rem", sm: "3rem" },
+                  wordWrap: "break-word",
+                }}
+              >
+                11%
+              </Typography>
+              <Typography variant="h6" sx={{ opacity: 0.7 }}>
+                DeFAI Holders
+              </Typography>
+            </Stack>
+         </Box>
+        */}
+  
+          {/* Pie Chart Section for Token Allocation - COMMENTED OUT */}
+          
+         <Stack
           sx={{
+            position: 'relative', // For positioning the overlay
             width: "100%",
-            mb: 4,
-            "& > *": {
-              minWidth: 0, // Prevents overflow
-            },
-          }}
-        >
-          {/* Total Supply */}
-          <Stack
-            sx={{
-              borderRadius: 2,
-              p: { xs: 1, sm: 3 },
-              background: "rgba(135,206,235,0.05)",
-              border: "1px solid rgba(135,206,235,0.2)",
-              cursor: "pointer",
-            }}
-            spacing={2}
-          >
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              [ 100B ]
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: "bold",
-                textShadow: "0 0 20px rgba(135,206,235,0.6)",
-                fontSize: { xs: "2rem", sm: "3rem" },
-                wordWrap: "break-word",
-              }}
-            >
-              100,000,000,000
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              Total Supply
-            </Typography>
-          </Stack>
-
-          {/* Initial Liquidity */}
-          <Stack
-            sx={{
-              borderRadius: 2,
-              p: { xs: 1, sm: 3 },
-              background: "rgba(135,206,235,0.05)",
-              border: "1px solid rgba(135,206,235,0.2)",
-              cursor: "pointer",
-            }}
-            spacing={2}
-          >
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              =====
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: "bold",
-                textShadow: "0 0 20px rgba(135,206,235,0.6)",
-                fontSize: { xs: "2rem", sm: "3rem" },
-                wordWrap: "break-word",
-              }}
-            >
-              30%
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              Initial Liquidity
-            </Typography>
-          </Stack>
-
-          {/* Tax */}
-          <Stack
-            sx={{
-              borderRadius: 2,
-              p: { xs: 1, sm: 3 },
-              background: "rgba(135,206,235,0.05)",
-              border: "1px solid rgba(135,206,235,0.2)",
-              cursor: "pointer",
-            }}
-            spacing={2}
-          >
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              {"====="}
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: "bold",
-                textShadow: "0 0 20px rgba(135,206,235,0.6)",
-                fontSize: { xs: "2rem", sm: "3rem" },
-                wordWrap: "break-word",
-              }}
-            >
-              20%
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              Team over 12 Months
-            </Typography>
-          </Stack>
-
-          {/* Fair Launch */}
-          <Stack
-            sx={{
-              borderRadius: 2,
-              p: { xs: 1, sm: 3 },
-              background: "rgba(135,206,235,0.05)",
-              border: "1px solid rgba(135,206,235,0.2)",
-              cursor: "pointer",
-            }}
-            spacing={2}
-          >
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              {">>"}{"<<"}
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: "bold",
-                textShadow: "0 0 20px rgba(135,206,235,0.6)",
-                fontSize: { xs: "2rem", sm: "3rem" },
-                wordWrap: "break-word",
-              }}
-            >
-              11%
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.7 }}>
-              DeFAI Holders
-            </Typography>
-          </Stack>
-        </Box>
-
-        {/* Pie Chart Section for Token Allocation */}
-        <Stack
-          sx={{
-            width: "100%",
-            maxWidth: { xs: "100%", md: "70%" }, // Limit width on larger screens
-            mx: "auto", // Center the stack
-            mt: 6, // Add margin top
+            maxWidth: { xs: "100%", md: "70%" }, 
+            mx: "auto", 
+            mt: 6, 
             mb: 4,
             alignItems: "center",
             background: "rgba(135,206,235,0.05)",
             borderRadius: 2,
             border: "1px solid rgba(135,206,235,0.2)",
             p: { xs: 2, sm: 3 },
-            backdropFilter: "blur(5px)",
+            backdropFilter: "blur(5px)", // Keep general backdrop for the card
             WebkitBackdropFilter: "blur(5px)",
             boxSizing: "border-box",
+            filter: 'blur(4px)', 
+            opacity: 0.3,      
+            userSelect: 'none', 
+            pointerEvents: 'none', 
           }}
           spacing={2}
         >
@@ -1104,58 +1113,44 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
           <Box sx={{ width: '100%', height: { xs: 300, sm: 350, md: 400 } }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={pieChartUIData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={"80%"} // Responsive radius
-                  fill="#8884d8"
-                  dataKey="value"
-                  nameKey="name"
-                  stroke="rgba(0,0,0,0.3)" // Add a slight border to slices for better separation
-                >
-                  {pieChartUIData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                <Pie data={pieChartUIData} cx="50%" cy="50%" labelLine={false} outerRadius={"80%"} fill="#8884d8" dataKey="value" nameKey="name" stroke="rgba(0,0,0,0.3)">
+                  {pieChartUIData.map((entry, index) => ( <Cell key={`cell-${index}`} fill={entry.color} /> ))}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: "rgba(26, 26, 46, 0.9)", // Dark background from theme
-                    borderColor: hackerGreen,
-                    borderRadius: '8px',
-                    fontFamily: "monospace",
-                    color: hackerGreen, // Default text color
-                    boxShadow: "0 0 10px rgba(135,206,235,0.3)",
-                  }}
-                  itemStyle={{ color: hackerGreen }} // Color for individual item text (e.g., "Name : Value")
-                  formatter={(value, name, props) => [`${value}%`, name]}
-                  cursor={{ fill: 'rgba(135,206,235,0.1)' }}
-                />
-                <Legend
-                  layout="horizontal"
-                  align="center"
-                  verticalAlign="bottom"
-                  wrapperStyle={{ 
-                    fontFamily: "monospace", 
-                    color: hackerGreen, 
-                    paddingTop: '15px',
-                    paddingBottom: '10px',
-                    fontSize: '0.8rem', // Adjust legend font size
-                  }}
-                  formatter={(value, entry) => {
-                    const { color, payload } = entry;
-                    // Use 'color' (from entry.color) as the primary source for legend item text color
-                    const legendColor = color || pieChartUIData.find(d => d.name === value)?.color || hackerGreen;
-                    return <span style={{ color: legendColor }}>{value} ({payload?.value}%)</span>;
-                  }}
-                  iconSize={10}
-                  iconType="circle"
-                />
+                <Tooltip contentStyle={{ background: "rgba(26, 26, 46, 0.9)", borderColor: hackerGreen, borderRadius: '8px', fontFamily: "monospace", color: hackerGreen, boxShadow: "0 0 10px rgba(135,206,235,0.3)" }} itemStyle={{ color: hackerGreen }} formatter={(value: any, name: any, props: any) => [`${value}%`, name]} cursor={{ fill: 'rgba(135,206,235,0.1)' }}/>
+                <Legend layout="horizontal" align="center" verticalAlign="bottom" wrapperStyle={{ fontFamily: "monospace", color: hackerGreen, paddingTop: '15px', paddingBottom: '10px', fontSize: '0.8rem' }} formatter={(value: any, entry: any) => { const { color } = entry; const legendColor = color || pieChartUIData.find(d => d.name === value)?.color || hackerGreen; return <span style={{ color: legendColor }}>{value} ({entry.payload?.value}%)</span>; }} iconSize={10} iconType="circle" />
               </PieChart>
             </ResponsiveContainer>
           </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 10, 
+              textAlign: 'center',
+              pointerEvents: 'auto', 
+              filter: 'none', 
+              opacity: 1, 
+            }}
+          >
+            <Typography
+              variant="h2" 
+              sx={{
+                fontWeight: 'bold',
+                color: orangeNeon, 
+                textShadow: '0 0 10px rgba(255,165,0,0.8)', 
+                padding: '15px 30px',
+                border: `3px dashed ${orangeNeon}`,
+                borderRadius: '10px',
+                background: 'rgba(0,0,0,0.5)' 
+              }}
+            >
+              COMING SOON
+            </Typography>
+          </Box>
         </Stack>
+       
 
         {/* DeFAI Governance Box */}
         <Stack
@@ -1562,9 +1557,9 @@ export default function TokenomicsPage() { // Renamed from Home to TokenomicsPag
             progressValue={70}
             progressLabelPosition="70%"
             progressLabelText="SNAPSHOT SOON!"
-            description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." // Check if this text needs updating
+            description="The snapshot of $DeFAI holders has been taken on March 31, 2025, enabling the 1:10 claim of $AIR tokens via Streamflow. No action is required before the snapshot date." 
             details={[
-              "1:1 claim ratio (1 $DeFAI = 1 $AIR)", // Check if this detail needs updating
+              "1:1 claim ratio (1 $DeFAI = 1 $AIR)", 
               "Streamflow distribution ensures fair and verifiable allocation",
               "Claim window closes 2 weeks after launch",
               "Unclaimed tokens return to community treasury after 7 days"
