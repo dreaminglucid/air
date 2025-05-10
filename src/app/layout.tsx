@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DeFAI Rewards",
-  description: "DeFAI Rewards",
+  description: "First Agentic Bank of DeFAI Optimizing Yield Across Generations",
   icons: {
     icon: [
       { url: "/favicon.ico" }
@@ -26,6 +26,19 @@ export const metadata: Metadata = {
     shortcut: [
       { url: "/icon.png" }
     ]
+  },
+  openGraph: {
+    title: "DeFAI Rewards",
+    description: "First Agentic Bank of DeFAI Optimizing Yield Across Generations",
+    images: [
+      {
+        url: "/defaibanner.png",
+        width: 1200,
+        height: 630,
+        alt: "DeFAI Rewards Banner",
+      },
+    ],
+    type: 'website',
   },
 };
 
