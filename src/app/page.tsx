@@ -15,11 +15,9 @@ const marquee = keyframes`
 `;
 
 const float = keyframes`
-  0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-  25% { transform: translateY(-8px) translateX(4px) rotate(1deg); }
-  50% { transform: translateY(0px) translateX(8px) rotate(0deg); }
-  75% { transform: translateY(8px) translateX(4px) rotate(-1deg); }
-  100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 `;
 
 // IconWithFallback component (copied from tokenomics page)
@@ -52,34 +50,24 @@ interface SnapshotInfoCardProps {
 }
 
 const SnapshotInfoCard = ({ title, progressValue, progressLabelPosition, progressLabelText, description, details }: SnapshotInfoCardProps) => {
-  const hackerGreen = "#87CEEB"; 
+  const primaryButtonBlue = "#2563EB"; // Using brand primary blue
   return (
     <Stack
-      sx={{
-        flex: 1, 
-        borderRadius: 2,
-        background: "rgba(0,0,0,0.02)", 
-        border: "1px solid rgba(0,0,0,0.1)", 
-        cursor: "pointer",
-        p: 3,
-        boxSizing: "border-box",
-        height: '100%', 
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
-      }}
+      sx={{ flex: 1, borderRadius: 2, background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.1)", cursor: "pointer", p: 3, boxSizing: "border-box", height: '100%', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
       spacing={2}
     >
-      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: '#000000' }}>{title}</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: '#000000', fontFamily: "'Orbitron', sans-serif" }}>{title}</Typography>
       <Box sx={{ position: "relative" }}>
-        <LinearProgress variant="determinate" value={progressValue} sx={{ height: 8, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.05)', '& .MuiLinearProgress-bar': { backgroundColor: hackerGreen, borderRadius: 5, }, mb: 3, }} />
-        <Box sx={{ position: "absolute", left: progressLabelPosition, top: "-25px", transform: "translateX(-50%)", background: 'rgba(255,255,255,0.8)', color: '#000000', px: 1.5, py: 0.5, borderRadius: 1, border: `1px dashed ${hackerGreen}`, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <LinearProgress variant="determinate" value={progressValue} sx={{ height: 8, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.05)', '& .MuiLinearProgress-bar': { backgroundColor: primaryButtonBlue, borderRadius: 5, }, mb: 3, }} />
+        <Box sx={{ position: "absolute", left: progressLabelPosition, top: "-25px", transform: "translateX(-50%)", background: 'rgba(255,255,255,0.8)', color: '#000000', px: 1.5, py: 0.5, borderRadius: 1, border: `1px dashed ${primaryButtonBlue}`, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <Typography variant="caption" sx={{ fontFamily: "monospace" }}>{progressLabelText}</Typography>
         </Box>
       </Box>
-      <Typography sx={{ textAlign: "center", color: '#333333' }}>{description}</Typography>
-      <Box sx={{ p: 2, background: "rgba(0,0,0,0.01)", borderRadius: 1, border: "1px dashed rgba(0,0,0,0.1)", }}>
+      <Typography sx={{ textAlign: "center", color: '#333333', fontFamily: "'Inter', sans-serif" }}>{description}</Typography>
+      <Box sx={{ p: 2, background: "rgba(0,0,0,0.01)", borderRadius: 1, border: "1px dashed rgba(0,0,0,0.08)" }}>
         <Stack spacing={1}>
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#000000" }}>{`// Snapshot Details`}</Typography>
-          {details.map((detail, index) => ( <Typography key={index} variant="body2" sx={{ textAlign: "left", fontFamily: "monospace", color: '#333333' }}>{`> ${detail}`}</Typography> ))}
+          <Typography variant="body2" sx={{ fontWeight: "bold", color: "#000000", fontFamily: "'Inter', sans-serif" }}>{`// Snapshot Details`}</Typography>
+          {details.map((detail, index) => ( <Typography key={index} variant="caption" sx={{ textAlign: "left", fontFamily: "monospace", color: '#555555' }}>{`> ${detail}`}</Typography> ))}
         </Stack>
       </Box>
     </Stack>
@@ -131,8 +119,8 @@ const snapshotData = [
 
 export default function BankingAILandingPage() {
   const primaryTextColor = "#000000"; // Black text
-  const hackerGreen = "#87CEEB"; // Main blue color
-  // const orangeNeon = "#FFFFFF"; // No longer explicitly needed for button icons if all blue
+  const primaryButtonBlue = "#2563EB"; // Brand guideline primary blue
+  const buttonIconBlue = "#2563EB"; // Using the same blue for icons in buttons
 
   useEffect(() => {
     document.body.style.backgroundColor = '#FFFFFF';
@@ -147,6 +135,28 @@ export default function BankingAILandingPage() {
 
   const handleAccordionChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpandedAccordion(isExpanded ? panel : false);
+  };
+
+  const buttonSx = {
+    color: primaryButtonBlue, 
+    borderColor: primaryButtonBlue, 
+    borderRadius: '50px',
+    padding: '10px 20px', // Default padding for buttons with text
+    fontSize: "1rem", 
+    fontWeight: 'bold',
+    textTransform: 'none', 
+    minHeight: '50px',
+    transition: 'transform 0.2s ease-in-out, border-color 0.2s ease, background-color 0.2s ease',
+    '&:hover': { 
+      borderColor: '#1E4BAD', 
+      backgroundColor: 'rgba(37, 99, 235, 0.04)',
+      transform: 'scale(1.05)',
+    }
+  };
+
+  const iconButtonSx = {
+    ...buttonSx,
+    padding: '10px', // Override padding for icon-only buttons to make them more square
   };
 
   return (
@@ -166,18 +176,18 @@ export default function BankingAILandingPage() {
       }}
     >
       <Stack
-        spacing={3}
+        spacing={2} // Adjusted spacing
         alignItems="center"
         sx={{
           textAlign: "center",
           zIndex: 1, 
           px: 2,
           width: '100%', // Ensure it takes width for alignment of its children
-          maxWidth: '800px', // Max width for the main text content block for readability
+          maxWidth: '700px' /* Adjusted max-width */ 
         }}
       >
         {/* Logo */}
-        <Box sx={{ width: 'auto', height: { xs: 150, sm: 200 }, mb: 2 }}> 
+        <Box sx={{ width: 'auto', height: { xs: 100, sm: 120 }, mb: 2 }}> 
           <img 
             src="/logo.png" 
             alt="Company Logo" 
@@ -192,190 +202,175 @@ export default function BankingAILandingPage() {
         <Typography
           variant="h1"
           sx={{
-            fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.0rem' }, // Adjusted size slightly
+            fontSize: { xs: '2.2rem', sm: '3rem', md: '3.5rem' }, 
             fontWeight: 'bold',
             color: primaryTextColor,
-            fontFamily: 'Georgia, Times New Roman, serif', // Serif font for this heading
-            lineHeight: 1.2,
-            mb: 1, // Reduced margin from previous Eliza version
+            fontFamily: "'Orbitron', sans-serif", // Orbitron font
+            lineHeight: 1.3,
+            mb: 1, 
           }}
         >
-          Banking AI Agents
+          Banking AI Agents.
         </Typography>
 
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.0rem' }, // Adjusted size slightly
-            fontWeight: 'bold',
+        <Typography 
+          variant="h5" // Corrected: Use h5 for tagline
+          sx={{ 
+            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' }, // Tagline font size
+            fontWeight: 'normal', 
             color: primaryTextColor,
-            fontFamily: 'Georgia, Times New Roman, serif', // Serif font for this heading
-            lineHeight: 1.2,
-            mb: 1, // Reduced margin from previous Eliza version
+            fontFamily: "'Inter', sans-serif", // Guideline: Sans-Serif or Inter for body
+            lineHeight: 1.6,
+            mb: 3,
+            maxWidth: '500px'
           }}
         >
           Rewarding Humans
         </Typography>
 
         <Stack direction="row" spacing={1.5} sx={{ mb: 4, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Button
-            variant="outlined"
-            size="large"
-            sx={{ color: hackerGreen, borderColor: hackerGreen, borderWidth: '2px', padding: "10px 20px", fontSize: "1rem", textTransform: 'none', minHeight: '50px', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { borderColor: hackerGreen, borderWidth: '2px', transform: 'scale(1.05)', boxShadow: `0 0 20px ${hackerGreen}`, backgroundColor: 'rgba(135,206,235,0.1)'} }}
-            component="a"
-            href="https://dexscreener.com/solana/3jiwexdwzxjva2yd8aherfsrn7a97qbwmdz8i4q6mh7y"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <IconWithFallback icon="mdi:chart-box" width={24} color={hackerGreen} />
+          <Button variant="outlined" size="large" sx={buttonSx} component="a" href="https://dexscreener.com/solana/3jiwexdwzxjva2yd8aherfsrn7a97qbwmdz8i4q6mh7y" target="_blank" rel="noopener noreferrer">
+            <IconWithFallback icon="mdi:chart-bar" width={24} color={buttonIconBlue} />
             &nbsp;Chart
           </Button>
+          <Button variant="outlined" size="large" sx={iconButtonSx} component="a" href="https://x.com/defairewards" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter) profile">
+            <IconWithFallback icon="pajamas:x" width={24} color={buttonIconBlue} />
+          </Button>
+          <Button variant="outlined" size="large" sx={iconButtonSx} component={Link} href="https://t.me/defairewards" aria-label="Telegram">
+             <IconWithFallback icon="mdi:telegram" width={24} color={buttonIconBlue} />
+          </Button>
           <Button
-            variant="outlined"
+            variant="contained" // Primary CTA style for Check Claim
             size="large"
-            sx={{ color: hackerGreen, borderColor: hackerGreen, borderWidth: '2px', padding: "10px", fontSize: "1rem", textTransform: 'none', minHeight: '50px', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { borderColor: hackerGreen, borderWidth: '2px', transform: 'scale(1.05)', boxShadow: `0 0 20px ${hackerGreen}`, backgroundColor: 'rgba(135,206,235,0.1)'} }}
-            component="a"
-            href="https://x.com/defairewards"
+            sx={{ 
+              ...buttonSx, // Inherit base styles
+              backgroundColor: primaryButtonBlue,
+              color: '#FFFFFF',
+              borderColor: primaryButtonBlue, // Ensure border matches for consistency on hover
+              '&:hover': { 
+                backgroundColor: '#1E4BAD', 
+                borderColor: '#1A3C8A', // Darker border on hover
+                transform: 'scale(1.05)',
+                boxShadow: `0 6px 15px rgba(37, 99, 235, 0.4)`,
+              }
+            }} 
+            component={Link}
+            href="https://claim.defairewards.net"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="X (formerly Twitter) profile"
           >
-            <IconWithFallback icon="pajamas:x" width={24} color={hackerGreen} />
+            Check Claim
           </Button>
-          <Link href="https://t.me/defairewards" passHref>
-            <Button
-              variant="outlined"
-              size="large"
-              sx={{ color: hackerGreen, borderColor: hackerGreen, borderWidth: '2px', padding: "10px", fontSize: "1rem", textTransform: 'none', minHeight: '50px', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { borderColor: hackerGreen, borderWidth: '2px', transform: 'scale(1.05)', boxShadow: `0 0 20px ${hackerGreen}`, backgroundColor: 'rgba(135,206,235,0.1)'} }}
-            >
-              <IconWithFallback icon="mdi:telegram" width={24} color={hackerGreen} />
-            </Button>
-          </Link>
         </Stack>
 
       </Stack>
 
-      {/* Image at the bottom of the main content stack */}
-      <Box
+      {/* Hero Image */}
+      <Box 
         sx={{
           width: '100%',
-          maxWidth: '500px', 
-          mt: 2, // Adjusted margin, might need 'auto' if main stack height varies greatly
+          maxWidth: '400px', 
+          mt: {xs: 2, sm: 3, md: 4}, // Responsive margin top
           alignSelf: 'center', 
-          paddingTop: '1rem',
-          flexShrink: 0, // Prevent from shrinking
+          flexShrink: 0, 
         }}
       >
         <Box 
           component="img"
-          src="/tits.png" 
-          alt="AI generated art" 
+          src="/tits.png" // Ensuring this uses /tits.png as per user's file
+          alt="AI Hero Image" 
           sx={{
             display: 'block',
             width: '100%',
             height: 'auto',
             objectFit: 'contain',
-            maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', 
+            borderRadius: '12px', 
+            // boxShadow is intentionally removed here as per user's prior file edit
+            animation: `${float} 6s infinite ease-in-out`, 
           }}
         />
       </Box>
 
-      {/* Partners Section - Bubble Grid Effect */}
+      {/* Partners Section - Bubble Grid Effect (styling to be reviewed for consistency) */}
       <Stack
-        spacing={3} // Increased spacing for title and grid
+        spacing={3} 
         alignItems="center"
-        sx={{ width: "100%", mt: {xs: 4, md: 8}, mb: 4, backgroundColor: '#f9f9f9', py: {xs: 3, md: 5} }}
+        sx={{ width: "100%", mt: {xs: 6, md: 10}, mb: 4, backgroundColor: 'transparent', py: {xs: 3, md: 5} }} // Transparent bg
       >
-        <Typography variant="h4" sx={{ fontSize: { xs: 28, md: 36 }, fontWeight: "bold", color: primaryTextColor, mb: 2 }}>Our Partners</Typography>
-        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center" sx={{ px: { xs: 1, sm: 2 }, maxWidth: '1000px' }}>
-          {partnerLogos.map((partner, index) => (
-            <Grid item key={partner.alt} xs={6} sm={4} md={3}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: primaryTextColor, mb: 2, fontFamily: "'Orbitron', sans-serif" }}>Our Partners</Typography>
+        <Grid container spacing={{ xs: 2, sm: 3 }} justifyContent="center" sx={{ px: { xs: 1, sm: 2 }, maxWidth: '800px' }}>
+          {partnerLogos.map((partner) => (
+            <Grid item key={partner.alt} xs={6} sm={3} md={3}>
               <Link href={partner.href} passHref target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <Box
                   sx={{
-                    width: { xs: 100, sm: 120 }, // Bubble size
+                    width: { xs: 100, sm: 120 }, 
                     height: { xs: 100, sm: 120 },
                     borderRadius: '50%',
-                    backgroundColor: '#ffffff', // White background for bubble
-                    boxShadow: '0px 4px 15px rgba(0,0,0,0.1)',
+                    backgroundColor: '#FFFFFF', 
+                    boxShadow: '0px 3px 10px rgba(0,0,0,0.08)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '15px',
-                    mx: 'auto', // Center bubble in grid item
-                    animation: `${float} ${Math.random() * 5 + 15}s infinite ease-in-out`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                      boxShadow: '0px 6px 20px rgba(0,0,0,0.15)',
-                    },
+                    padding: '10px',
+                    mx: 'auto', 
+                    animation: `${float} ${Math.random() * 4 + 10}s infinite ease-in-out`,
+                    animationDelay: `${Math.random() * 1.5}s`,
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                     '&:hover': { transform: 'scale(1.1)', boxShadow: '0px 5px 15px rgba(0,0,0,0.12)' },
                   }}
                 >
-                  <img 
-                    src={partner.src} 
-                    alt={partner.alt} 
-                    style={{ 
-                      maxWidth: `calc(100% * ${partner.sizeFactor || 0.7})`, // Adjust max width based on factor
-                      maxHeight: `calc(100% * ${partner.sizeFactor || 0.7})`, 
-                      objectFit: 'contain', 
-                      filter: 'grayscale(100%) brightness(0%) invert(0%)'
-                    }}
-                  />
+                  <img src={partner.src} alt={partner.alt} style={{ maxWidth: `calc(100% * ${partner.sizeFactor || 0.65})`, maxHeight: `calc(100% * ${partner.sizeFactor || 0.65})`, objectFit: 'contain', filter: 'grayscale(100%) brightness(0%) invert(0%)' }} />
                 </Box>
               </Link>
             </Grid>
           ))}
         </Grid>
       </Stack>
-
-      {/* Snapshots Section - Accordion Style */}
+      
+      {/* Snapshots Section - Accordion Style (styling to be reviewed for consistency) */}
       <Stack 
-        spacing={2} // Spacing between accordions
-        sx={{ 
-          width: "100%", 
-          maxWidth: '900px', // Max width for accordion section
-          mx: 'auto', 
-          mt: {xs: 4, md: 6}, 
-          mb: 4,
-          px: 2, 
-        }}
+        spacing={1} // Reduced spacing between accordions
+        sx={{ width: "100%", maxWidth: '700px', mx: 'auto', mt: {xs: 3, md: 5}, mb: 4, px: 2 }}
       >
         {snapshotData.map((snapshot) => (
           <Accordion 
             key={snapshot.id} 
             expanded={expandedAccordion === snapshot.id} 
             onChange={handleAccordionChange(snapshot.id)}
+            disableGutters
+            elevation={0}
             sx={{
-              background: "rgba(0,0,0,0.02)",
-              border: "1px solid rgba(0,0,0,0.1)",
-              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-              '&.Mui-expanded': {
-                margin: '16px 0' // Add margin when expanded
+              border: `1px solid rgba(0,0,0,0.1)`,
+              borderRadius: '8px !important', // Ensure rounded corners
+              backgroundColor: 'transparent',
+              '&:not(:last-child)': {
+                marginBottom: '8px',
               },
-              '&::before': {
-                 display: 'none', // Remove default top border from accordion
-              }
+              '&.Mui-expanded': { margin: '0 0 8px 0' }, // Remove extra margin when expanded if not needed
+              '&::before': { display: 'none' }
             }}
           >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon sx={{color: primaryTextColor}}/>}
-              aria-controls={`${snapshot.id}-content`}
-              id={`${snapshot.id}-header`}
-              sx={{ '& .MuiAccordionSummary-content': { marginY: '12px'} }}
-            >
-              <Typography variant="h6" sx={{color: primaryTextColor, fontWeight: 'medium'}}>{snapshot.title}</Typography>
+            <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: primaryTextColor}}/>} aria-controls={`${snapshot.id}-content`} id={`${snapshot.id}-header`} sx={{backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', minHeight: '56px', '& .MuiAccordionSummary-content': { marginY: '10px'} }}>
+              <Typography variant="subtitle1" sx={{color: primaryTextColor, fontWeight: '600', fontFamily: "'Orbitron', sans-serif"}}>{snapshot.title}</Typography>
             </AccordionSummary>
-            <AccordionDetails sx={{ backgroundColor: 'rgba(0,0,0,0.01)', paddingTop: 0}}>
-              <SnapshotInfoCard 
-                title="" // Title is now in AccordionSummary, so pass empty or remove from card if not needed internally
-                progressValue={snapshot.progressValue}
-                progressLabelPosition={snapshot.progressLabelPosition}
-                progressLabelText={snapshot.progressLabelText}
-                description={snapshot.description}
-                details={snapshot.details}
-              />
+            <AccordionDetails sx={{ backgroundColor: '#FFFFFF', padding: '16px'}}>
+              {/* SnapshotInfoCard is now effectively inlined for easier styling according to guidelines */}
+              <Stack spacing={2}>
+                  <Box sx={{ position: "relative" }}>
+                      <LinearProgress variant="determinate" value={snapshot.progressValue} sx={{ height: 8, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.05)', '& .MuiLinearProgress-bar': { backgroundColor: primaryButtonBlue, borderRadius: 5, }, mb: 3, }} />
+                      <Box sx={{ position: "absolute", left: snapshot.progressLabelPosition, top: "-25px", transform: "translateX(-50%)", background: 'rgba(255,255,255,0.9)', color: '#000000', px: 1.5, py: 0.5, borderRadius: 1, border: `1px dashed ${primaryButtonBlue}`, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                          <Typography variant="caption" sx={{ fontFamily: "monospace" }}>{snapshot.progressLabelText}</Typography>
+                      </Box>
+                  </Box>
+                  <Typography sx={{ textAlign: "center", color: '#333333', fontFamily: "'Inter', sans-serif" }}>{snapshot.description}</Typography>
+                  <Box sx={{ p: 2, background: "rgba(0,0,0,0.01)", borderRadius: 1, border: "1px dashed rgba(0,0,0,0.08)" }}>
+                      <Stack spacing={1}>
+                          <Typography variant="body2" sx={{ fontWeight: "bold", color: "#000000", fontFamily: "'Inter', sans-serif" }}>{`// Snapshot Details`}</Typography>
+                          {snapshot.details.map((detail, index) => ( <Typography key={index} variant="caption" sx={{ textAlign: "left", fontFamily: "monospace", color: '#555555' }}>{`> ${detail}`}</Typography> ))}
+                      </Stack>
+                  </Box>
+              </Stack>
             </AccordionDetails>
           </Accordion>
         ))}
