@@ -32,10 +32,10 @@ export const metadata: Metadata = {
     description: "First Agentic Bank of DeFAI Optimizing Yield Across Generations",
     images: [
       {
-        url: "/defaibanner.png",
+        url: "/social_logo.png",
         width: 1200,
         height: 630,
-        alt: "DeFAI Rewards Banner",
+        alt: "DeFAI Rewards Social Share Image",
       },
     ],
     type: 'website',
