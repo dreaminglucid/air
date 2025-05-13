@@ -121,6 +121,7 @@ export default function BankingAILandingPage() {
   const primaryTextColor = "#000000"; // Black text
   const primaryButtonBlue = "#2563EB"; // Brand guideline primary blue
   const buttonIconBlue = "#2563EB"; // Using the same blue for icons in buttons
+  const headlineFont = "'Inter', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif";
 
   useEffect(() => {
     document.body.style.backgroundColor = '#FFFFFF';
@@ -176,53 +177,39 @@ export default function BankingAILandingPage() {
       }}
     >
       <Stack
-        spacing={2} // Adjusted spacing
+        spacing={1} 
         alignItems="center"
-        sx={{
-          textAlign: "center",
-          zIndex: 1, 
-          px: 2,
-          width: '100%', // Ensure it takes width for alignment of its children
-          maxWidth: '700px' /* Adjusted max-width */ 
-        }}
+        sx={{ textAlign: "center", zIndex: 1, px: 2, width: '100%', maxWidth: '700px', mt: {xs: 8, sm: 10} /* Added top margin to push content down since logo is removed */ }}
       >
-        {/* Logo */}
-        <Box sx={{ width: 'auto', height: { xs: 100, sm: 120 }, mb: 2 }}> 
-          <img 
-            src="/logo.png" 
-            alt="Company Logo" 
-            style={{ 
-              height: '100%', 
-              width: 'auto', 
-              filter: 'grayscale(100%) brightness(0%) invert(0%)' // Make logo black
-            }}
-          />
+        {/* Logo Removed 
+        <Box sx={{ width: 'auto', height: { xs: 100, sm: 120 }, mb: 2 }}>  
+          <img src="/logo.png" alt="Company Logo" style={{ height: '100%', width: 'auto', filter: 'grayscale(100%) brightness(0%) invert(0%)' }} />
         </Box>
+        */}
 
         <Typography
           variant="h1"
           sx={{
-            fontSize: { xs: '2.2rem', sm: '3rem', md: '3.5rem' }, 
+            fontSize: { xs: '2.8rem', sm: '3.8rem', md: '4.5rem' }, 
             fontWeight: 'bold',
-            color: primaryTextColor,
-            fontFamily: "'Orbitron', sans-serif", // Orbitron font
-            lineHeight: 1.3,
-            mb: 1, 
+            color: primaryButtonBlue,
+            fontFamily: headlineFont,
+            lineHeight: 1.1,
+            mb: 0,
           }}
         >
           Banking AI Agents.
         </Typography>
 
         <Typography 
-          variant="h5" // Corrected: Use h5 for tagline
+          variant="h1"
           sx={{ 
-            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' }, // Tagline font size
-            fontWeight: 'normal', 
+            fontSize: { xs: '2.8rem', sm: '3.8rem', md: '4.5rem' }, 
+            fontWeight: 'bold',
             color: primaryTextColor,
-            fontFamily: "'Inter', sans-serif", // Guideline: Sans-Serif or Inter for body
-            lineHeight: 1.6,
-            mb: 3,
-            maxWidth: '500px'
+            fontFamily: headlineFont, 
+            lineHeight: 1.1, 
+            mb: 3, 
           }}
         >
           Rewarding Humans
@@ -255,7 +242,7 @@ export default function BankingAILandingPage() {
               }
             }} 
             component={Link}
-            href="https://claim.defairewards.net"
+            href="https://squad.defairewards.net"
             target="_blank"
             rel="noopener noreferrer"
           >
