@@ -56,11 +56,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const pathname = usePathname();
 
   // Handle drawer toggle
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  // Handle sidebar toggle
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   // Load notification count
@@ -152,12 +158,28 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const drawer = (
     <>
       <Toolbar sx={{ 
-        justifyContent: 'center', 
-        borderBottom: '1px solid rgba(135,206,235,0.2)'
+        justifyContent: sidebarOpen ? 'flex-start' : 'center', 
+        borderBottom: '1px solid rgba(135,206,235,0.2)',
+        minHeight: '64px !important',
+        px: 2,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1
       }}>
-        <Typography variant="h6" sx={{ color: "#87CEEB", fontWeight: "bold" }}>
-          DeFAI Menu
-        </Typography>
+        <IconButton
+          color="inherit"
+          aria-label="toggle sidebar"
+          edge="start"
+          onClick={handleSidebarToggle}
+          sx={{ color: "#87CEEB" }}
+        >
+          <Icon icon={sidebarOpen ? "mdi:menu-open" : "mdi:menu"} width={24} height={24} />
+        </IconButton>
+        {sidebarOpen && (
+          <Typography variant="h6" sx={{ color: "#87CEEB", fontWeight: "bold", ml: 1 }}>
+            DeFAI Menu
+          </Typography>
+        )}
       </Toolbar>
       <List sx={{ overflowY: 'auto' }}>
         {menuItems.map((item) => (
@@ -171,10 +193,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 '&:hover': {
                   bgcolor: 'rgba(135,206,235,0.2)'
                 },
-                
+                justifyContent: sidebarOpen ? 'flex-start' : 'center',
+                minHeight: 48,
+                px: 2.5,
               }}
             >
-              <ListItemIcon sx={{ color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)' }}>
+              <ListItemIcon sx={{ 
+                color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)',
+                minWidth: sidebarOpen ? 40 : 'auto',
+                mr: sidebarOpen ? 2 : 0
+              }}>
                 {item.badge ? (
                   <Badge badgeContent={item.badge} color="error">
                     <Icon icon={item.icon} width={24} height={24} />
@@ -183,15 +211,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <Icon icon={item.icon} width={24} height={24} />
                 )}
               </ListItemIcon>
-              <ListItemText 
-                primary={item.text} 
-                sx={{ 
-                  color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)',
-                  '& .MuiListItemText-primary': {
-                    fontWeight: item.active ? 'bold' : 'normal'
-                  }
-                }}
-              />
+              {sidebarOpen && (
+                <ListItemText 
+                  primary={item.text} 
+                  sx={{ 
+                    color: item.active ? '#87CEEB' : 'rgba(255,255,255,0.7)',
+                    '& .MuiListItemText-primary': {
+                      fontWeight: item.active ? 'bold' : 'normal'
+                    }
+                  }}
+                />
+              )}
             </ListItemButton>
           </ListItem>
         ))}
@@ -207,21 +237,27 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             sx={{ 
               '&:hover': {
                 bgcolor: 'rgba(135,206,235,0.2)'
-              }
+              },
+              justifyContent: sidebarOpen ? 'flex-start' : 'center',
+              minHeight: 48,
+              px: 2.5,
             }}
           >
             <ListItemIcon sx={{ 
               color: 'rgba(135,206,235,0.7)',
-              minWidth: '48px' 
+              minWidth: sidebarOpen ? 40 : 'auto',
+              mr: sidebarOpen ? 2 : 0
             }}>
               <Icon icon="mdi:arrow-left" width={24} height={24} />
             </ListItemIcon>
-            <ListItemText 
-              primary="Back to Home" 
-              sx={{ 
-                color: 'rgba(135,206,235,0.7)'
-              }}
-            />
+            {sidebarOpen && (
+              <ListItemText 
+                primary="Back to Home" 
+                sx={{ 
+                  color: 'rgba(135,206,235,0.7)'
+                }}
+              />
+            )}
           </ListItemButton>
         </ListItem>
       </List>
@@ -240,21 +276,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       width: '100%',
       overflow: 'hidden',
       position: 'relative',
-      bgcolor: 'rgba(13, 17, 28, 1)'  // Dark background
+      bgcolor: 'rgba(13, 17, 28, 1)'
     }}>
       <CssBaseline />
       
       <AppBar 
         position="fixed"
         sx={{ 
-          width: { md: mobileOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
-          ml: { md: mobileOpen ? `${drawerWidth}px` : 0 },
+          width: { md: `calc(100% - ${sidebarOpen ? drawerWidth : 64}px)` },
+          ml: { md: `${sidebarOpen ? drawerWidth : 64}px` },
           bgcolor: 'rgba(13, 17, 28, 0.95)',
           backdropFilter: 'blur(10px)',
           borderBottom: '1px solid rgba(135,206,235,0.2)',
           boxShadow: 'none',
           transition: 'width 0.3s, margin-left 0.3s',
-          zIndex: (theme) => theme.zIndex.drawer + 1  // Ensure AppBar is above drawer
+          zIndex: (theme) => theme.zIndex.drawer + 1
         }}
       >
         <Toolbar>
@@ -263,7 +299,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, color: "#87CEEB" }}
+            sx={{ mr: 2, color: "#87CEEB", display: { xs: 'flex', md: 'none' } }}
           >
             <Icon icon={mobileOpen ? "mdi:close" : "mdi:menu"} width={24} height={24} />
           </IconButton>
@@ -289,7 +325,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       
       <Box
         component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        sx={{ width: { md: sidebarOpen ? drawerWidth : 64 }, flexShrink: { md: 0 } }}
       >
         {isMobile ? (
           <Drawer
@@ -318,12 +354,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               display: { xs: 'none', md: 'block' },
               '& .MuiDrawer-paper': { 
                 boxSizing: 'border-box', 
-                width: drawerWidth,
+                width: sidebarOpen ? drawerWidth : 64,
                 bgcolor: 'rgba(13, 17, 28, 0.95)',
                 backdropFilter: 'blur(10px)',
                 borderRight: '1px solid rgba(135,206,235,0.2)',
                 height: '100%',
-                zIndex: (theme) => theme.zIndex.appBar - 1 // Below app bar
+                zIndex: (theme) => theme.zIndex.appBar - 1,
+                transition: 'width 0.3s ease',
+                overflowX: 'hidden'
               },
             }}
           >
@@ -336,14 +374,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         component="main"
         sx={{ 
           flexGrow: 1,
-          width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
+          width: { xs: '100%', md: `calc(100% - ${sidebarOpen ? drawerWidth : 64}px)` },
+          ml: { md: `${sidebarOpen ? drawerWidth : 64}px` },
           p: { xs: 2, md: 3 },
           pt: { xs: 10, md: 12 },
           overflowX: 'hidden',
-          bgcolor: 'rgba(13, 17, 28, 1)', // Dark background
+          bgcolor: 'rgba(13, 17, 28, 1)',
           position: 'relative',
-          zIndex: 1
+          zIndex: 1,
+          transition: 'width 0.3s, margin-left 0.3s'
         }}
       >
         {children}

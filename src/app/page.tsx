@@ -242,9 +242,7 @@ export default function BankingAILandingPage() {
               }
             }} 
             component={Link}
-            href="https://squad.defairewards.net"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/dashboard/claim"
           >
             Check Claim
           </Button>
